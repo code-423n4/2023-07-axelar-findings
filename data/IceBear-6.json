@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "IceBear",
+  "risk": "2",
+  "title": "Use of delegatecall in a payable function inside a loop",
+  "issueId": 6,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/6"
+}
