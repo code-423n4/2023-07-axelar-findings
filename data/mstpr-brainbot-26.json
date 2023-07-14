@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "mstpr-brainbot",
+  "risk": "3",
+  "title": "Registering tokens can be impossible due to salt required to deploy token manager deployer contract is precomputable for anyone",
+  "issueId": 26,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/26"
+}
