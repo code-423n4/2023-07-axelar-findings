@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "T1MOH",
+  "risk": "2",
+  "title": "`InterchainProposalExecutor.sol` is unable to execute calls that require sending ether, because can't receive ether",
+  "issueId": 12,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/12"
+}
