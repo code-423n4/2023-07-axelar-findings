@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "mrudenko",
+  "risk": "3",
+  "title": "MIssed inspection if contract has another eth to be sent  in. `_executeProposal` - result of DoS attack",
+  "issueId": 19,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/19"
+}
