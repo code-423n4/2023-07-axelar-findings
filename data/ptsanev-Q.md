@@ -1,2 +1,4 @@
 ## [L-01] - add a refund functionality for users who overpay the gas fee for a call execution instead of requiring an exact amount of ``msg.value``. Use a pull instead of push to avoid risky arbitrary call, like storing the amount to be refunded in a mapping of address to uint.
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalSender.sol#L104-L117
+
+## [L-02] - In ``InterchainGovernance.sol`` the function ``executeProposal()`` takes in a nativeValue parameter that is used instead of the ``msg.value`` to pass on to the next call, putting the contract at risk of slowly being drained by it's funds since a user can pass 1 wei but give a value of a 1000. That is if the proposal goes through, which is why I give it a LOW. **Mitigation:** use the ``msg.value`` provided by the user or compare it to the parameter.
