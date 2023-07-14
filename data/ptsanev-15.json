@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "ptsanev",
+  "risk": "2",
+  "title": "InterchainProposalSender.sol#_sendProposal() - no check for sufficient gas amount provided",
+  "issueId": 15,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/15"
+}
