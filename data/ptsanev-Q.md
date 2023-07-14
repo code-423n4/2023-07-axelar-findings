@@ -1,0 +1,2 @@
+## [L-01] - add a refund functionality for users who overpay the gas fee for a call execution instead of requiring an exact amount of ``msg.value``. Use a pull instead of push to avoid risky arbitrary call, like storing the amount to be refunded in a mapping of address to uint.
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalSender.sol#L104-L117
