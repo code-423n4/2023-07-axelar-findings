@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "mrudenko",
+  "risk": "2",
+  "title": "`TokenManagerMintBurn::_takeToken` function will not work correctly with fee-on-transfer token - ",
+  "issueId": 21,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/21"
+}
