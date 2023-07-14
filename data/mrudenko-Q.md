@@ -19,7 +19,7 @@ NativeGasPaidForExpressCallWithToken
 ```
 There have the same parameters each time. Why not add an event type parameter that will be `indexed` and use one event (this will reduce deployment cost)
 
-# [L-02] Duplicated code in _rotateSigners method. There is logic where signers.isSigner array, but this logic is done in `onlySigners` - modifier. So this code no needed 
+# [L-03] Duplicated code in _rotateSigners method. There is logic where signers.isSigner array, but this logic is done in `onlySigners` - modifier. So this code not needed 
 Mitigation steps: 
 - remove the following code in _rotateSigners method
 ```
@@ -31,3 +31,6 @@ for (uint256 i; i < length; ++i) {
 }
 ``` 
 https://github.com/code-423n4/2023-07-axelar/blob/acda3c34e5eeecccbd939eb8bcfc10c6e0215192/contracts/cgp/auth/MultisigBase.sol#L154
+
+# [L-04] `minimumTimeDelay` should be bounded in TimeLock contract. 
+The InterchainGovernance::constructor method sets a `minimumTimeDelay` that is unbounded, meaning it can possibly be a really huge number. While this likeability is still low, it seems dangerous. I suggest you remove to upper time delay value
