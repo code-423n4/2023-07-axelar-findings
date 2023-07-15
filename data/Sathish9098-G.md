@@ -1,31 +1,52 @@
 
-# Divide by zero should be avoided 
+# GAS OPTIMIZATIONS
 
-# Use safeTranfer/SafetranferFrom
+##
 
-# Return values of transfer functions should be checked 
+## [G] Optimizing gas usage by packing state variables 
 
-# Return values of approve should be checked 
+If variables occupying the same slot are both written the same function or by the constructor, avoids a separate Gsset (20000 gas). Reads of the variables can also be cheaper.
 
-# Initialize functions could be frontrun 
+Struct can be packed fewer slots
 
-# For Critical functions should emit events
+state variables only assigned within constructor can be immutable 
 
-# Use safeAllowance instead of normal approve 
+struct can be used instead of mapping 
 
-# Need to approve 0 first for some of the tokens 
+calldata can be used instead of memory for external functions 
 
-Revert on Transfer to the Zero Address
+Use constants when the values are not changed for state variable 
 
-Revert on Zero Value Approvals
+remove unused state variables
 
-Revert on Zero Value Transfers
+bools can be avoided 
 
-Approval Race Protections
-Some tokens (e.g. USDT, KNC) do not allow approving an amount M > 0 when an existing amount N > 0 is already approved. This is to protect from an ERC20 attack vector described here.
+ Functions guaranteed to revert when called by normal users can be marked payable 10 210
 
-Tokens with Blocklists
+don't emit state variable when stack varibale available 
 
-Pausable Tokens
+Superflows event
 
-Missing Return Values- some tokens not return any values 
+combine emits to avoid gas 
+
+
+
+Optimize names of public/external functions 
+
+
+
+STATE VARIABLES SHOULD BE CACHED IN STACK VARIABLES RATHER THAN RE-READING THEM FROM STORAGE 
+Only missing instance 
+
+The result of function calls should be cached rather than re-calling the function 3
+
+Using storage instead of memory for structs/arrays saves gas
+
+Only missing instances 
+
+Multiple accesses of a mapping/array should use a local variable cache
+
+ <x> += <y>/<x> -= <y> costs more gas than <x> = <x> + <y>/<x> = <x> - <y> for state variables  
+
+
+ 
