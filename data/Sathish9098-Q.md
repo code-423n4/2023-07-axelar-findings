@@ -32,6 +32,8 @@ Pausable Tokens
 
 Missing Return Values- some tokens not return any values 
 
+Use ownable2step instead of normal ownable 
+
 # NON CRITICAL FINDINGS
 
 ##
@@ -49,3 +51,10 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interfaces/IInterchainTokenService.sol#L32-L76
 
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interfaces/IExpressCallHandler.sol#L9-L43
+
+## 
+
+## [NC-2] Shorter the inheritance list
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token-service/InterchainTokenService.sol#L37-L44
+
