@@ -3,6 +3,20 @@
 ```URL
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/gmp-sdk/deploy/ConstAddressDeployer.sol#L42-L52
 ```
+```sol
+    function deployAndInit(
+        bytes memory bytecode,
+        bytes32 salt,
+        bytes calldata init
+    ) external returns (address deployedAddress_) {
+        deployedAddress_ = _deploy(bytecode, keccak256(abi.encode(msg.sender, salt)));
+
+
+        // solhint-disable-next-line avoid-low-level-calls
+        (bool success, ) = deployedAddress_.call(init);
+        if (!success) revert FailedInit();
+    }
+```
 ## Description
 The caller can redirect execution to arbitrary bytecode locations.
 
@@ -20,6 +34,20 @@ The use of assembly should be minimal. A developer should not allow a user to as
 ```URL
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/gmp-sdk/deploy/ConstAddressDeployer.sol#L42-L52
 ```
+```sol
+    function deployAndInit(
+        bytes memory bytecode,
+        bytes32 salt,
+        bytes calldata init
+    ) external returns (address deployedAddress_) {
+        deployedAddress_ = _deploy(bytecode, keccak256(abi.encode(msg.sender, salt)));
+
+
+        // solhint-disable-next-line avoid-low-level-calls
+        (bool success, ) = deployedAddress_.call(init);
+        if (!success) revert FailedInit();
+    }
+```
 ## Description
 Multiple calls are executed in the same transaction.
 
@@ -32,4 +60,33 @@ It is recommended to follow call best practices:
 
 Avoid combining multiple calls in a single transaction, especially when calls are executed as part of a loop
 Always assume that external calls can fail
-Implement the contract logic to handle failed calls
+Implement the contract logic to handle failed calls.
+
+## L-03
+# SWC-118 Incorrect Constructor Name
+```URL
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/utils/Multicall.sol#L22-L33
+```
+```sol
+    function multicall(bytes[] calldata data) public payable returns (bytes[] memory results) {
+        results = new bytes[](data.length);
+        for (uint256 i = 0; i < data.length; ++i) {
+            (bool success, bytes memory result) = address(this).delegatecall(data[i]);
+
+
+            if (!success) {
+                revert(string(result));
+            }
+
+
+            results[i] = result;
+        }
+    }
+```
+## Description
+Until Solidity version 0.4.21 the constructor can only be defined as a function with the exact same name as the contract class. The function "multicall" looks similar to a constructor for "Multicall" but is not a constructor. Please rename to avoid confusion.
+
+Constructors are special functions that are called only once during the contract creation. They often perform critical, privileged actions such as setting the owner of the contract. Before Solidity version 0.4.22, the only way of defining a constructor was to create a function with the same name as the contract class containing it. A function meant to become a constructor becomes a normal, callable function if its name doesn't exactly match the contract name. This behavior sometimes leads to security issues, in particular when smart contract code is re-used with a different name but the name of the constructor function is not changed accordingly.
+
+## Remediation
+Solidity version 0.4.22 introduces a new constructor keyword that make a constructor definitions clearer. It is therefore recommended to upgrade the contract to a recent version of the Solidity compiler and change to the new constructor declaration.
