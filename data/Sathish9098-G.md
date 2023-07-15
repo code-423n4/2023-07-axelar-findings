@@ -48,5 +48,7 @@ Multiple accesses of a mapping/array should use a local variable cache
 
  <x> += <y>/<x> -= <y> costs more gas than <x> = <x> + <y>/<x> = <x> - <y> for state variables  
 
+Avoid contract existence check 
+
 
  
