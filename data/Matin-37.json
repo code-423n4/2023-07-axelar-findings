@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Matin",
+  "risk": "2",
+  "title": "Missing active proxy check in `onlyProxy` modifier in the contract `Upgradable`",
+  "issueId": 37,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/37"
+}
