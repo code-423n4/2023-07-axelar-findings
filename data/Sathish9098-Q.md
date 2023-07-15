@@ -1,6 +1,8 @@
 
 # Divide by zero should be avoided 
 
+# Event is missing the indexed field 
+
 # Use safeTranfer/SafetranferFrom
 
 # Return values of transfer functions should be checked 
@@ -29,3 +31,21 @@ Tokens with Blocklists
 Pausable Tokens
 
 Missing Return Values- some tokens not return any values 
+
+# NON CRITICAL FINDINGS
+
+##
+
+## [NC-1] Events is missing indexed fields
+
+Index event fields make the field more quickly accessible to off-chain.
+
+Each event should use three indexed fields if there are three or more fields.
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/interfaces/IAxelarServiceGovernance.sol#L15-L17
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/interfaces/IMultisigBase.sol#L22
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interfaces/IInterchainTokenService.sol#L32-L76
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interfaces/IExpressCallHandler.sol#L9-L43
