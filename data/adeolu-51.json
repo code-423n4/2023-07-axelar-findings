@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "adeolu",
+  "risk": "2",
+  "title": "_takeToken() can revert unexpectedly due to improper subtraction of \"balance before\" from \"balance after\" value. ",
+  "issueId": 51,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/51"
+}
