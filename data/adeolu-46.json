@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "adeolu",
+  "risk": "2",
+  "title": "validateProof() in AxelarAuthWeighted.sol calls _validateSignatures() which has an unbounded for loop",
+  "issueId": 46,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/46"
+}
