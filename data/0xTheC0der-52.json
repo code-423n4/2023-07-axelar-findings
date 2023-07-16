@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "0xTheC0der",
+  "risk": "2",
+  "title": "Insufficient support for tokens with different decimals on different chains lead to loss of funds on cross-chain bridging",
+  "issueId": 52,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/52"
+}
