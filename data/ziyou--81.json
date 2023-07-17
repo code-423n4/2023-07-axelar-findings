@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "ziyou-",
+  "risk": "2",
+  "title": "\"_minimumTimeLockDelay\" parameter that is too large or too small may cause unexpected issues.",
+  "issueId": 81,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/81"
+}
