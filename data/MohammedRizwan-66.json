@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "MohammedRizwan",
+  "risk": "3",
+  "title": "transferMintLimiter() and setTokenMintLimits() will always revert due to incorrect modifier condition",
+  "issueId": 66,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/66"
+}
