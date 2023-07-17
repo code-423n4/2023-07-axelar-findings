@@ -150,33 +150,7 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 
 ##
 
-## [G-3] Remove unused state variables to save gas
-
-The code you provided defines two state variables, ``governanceChain`` and ``governanceAddress``. These state variables are declared as public, which means that they are accessible from outside the contract. The code also assigns the values of ``governanceChain_`` and ``governanceAddress_`` to the state variables ``governanceChain`` and ``governanceAddress``.
-
-The gas cost of declaring a state variable is 20,000 gas. The gas cost of assigning a value to a string state variable is ``3200 GAS``.
-
-In this case, the gas cost of declaring the state variables ``governanceChain`` and ``governanceAddress`` is ``40,000 gas``. The gas cost of assigning the values of ``governanceChain_`` and ``governanceAddress_ ``to the state variables ``governanceChain`` and ``governanceAddress`` is ``3200 gas``.
-
-However, the state variables governanceChain and governanceAddress are never used in the contract. This means that the gas cost of declaring and assigning values to these state variables is wasted.
-
-If you remove the state variables governanceChain and governanceAddress from the contract, the gas cost of the contract will be reduced by ``46400 gas``.
-
-```solidity
-FILE: 2023-07-axelar/contracts/cgp/governance/InterchainGovernance.sol
-
-21: string public governanceChain;
-22: string public governanceAddress;
-
-39: governanceChain = governanceChain_;
-40: governanceAddress = governanceAddress_;
-
-```
-https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/governance/InterchainGovernance.sol#L21-L22
- 
-##
-
-## [G-4] Functions guaranteed to revert when called by normal users can be marked ``payable`` 
+## [G-3] Functions guaranteed to revert when called by normal users can be marked ``payable`` 
 
 If a function modifier such as ``onlyOwner`` is used, the function will revert if a normal user tries to pay the function. Marking the function as payable will lower the gas cost for legitimate callers because the compiler will not include checks for whether a payment was provided. The extra opcodes avoided are ``CALLVALUE(2),DUP1(3),ISZERO(3),PUSH2(3),JUMPI(10),PUSH1(3),DUP1(3),REVERT(0),JUMPDEST(1),POP(2)``, which costs an average of about 21 gas per call to the function, in addition to the extra deployment cost
 
@@ -285,20 +259,39 @@ https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/interchain-
 
 ```
 
-don't emit state variable when stack varibale available 
+##
 
-Superflows event
+## [G-5] state variables should be cached in stack variables rather than re-reading them from storage
 
-combine emits to avoid gas 
+### NOTE: The instances are missed in BOT RACE
 
-
-
-Optimize names of public/external functions 
+The instances below point to the second+ access of a state variable within a function. Caching of a state variable replaces each Gwarmaccess (100 gas) with a much cheaper stack read. Other less obvious fixes/optimizations include having local memory caches of state variable structs, or having local caches of state variable contracts/addresses.
 
 
+##
 
-STATE VARIABLES SHOULD BE CACHED IN STACK VARIABLES RATHER THAN RE-READING THEM FROM STORAGE 
-Only missing instance 
+## [G-5] Optimize names to save gas
+
+public/external function names and public member variable names can be optimized to save gas. See this [link](https://gist.github.com/IllIllI000/a5d8b486a8259f9f77891a919febd1a9) for an example of how it works. Below are the interfaces/abstract contracts that can be optimized so that the most frequently-called functions use the least amount of gas possible during method lookup. Method IDs that have two leading zero bytes can save 128 gas each during deployment, and renaming functions to have lower method IDs will save 22 gas per call, [per sorted position shifted](https://medium.com/joyso/solidity-how-does-function-name-affect-gas-consumption-in-smart-contract-47d270d8ac92)
+
+```solidity
+
+///@audit getProposalEta(),executeProposal(),
+FILE: 2023-07-axelar/contracts/cgp/governance/InterchainGovernance.sol
+
+///@audit executeMultisigProposal(),
+FILE: 2023-07-axelar/contracts/cgp/governance/AxelarServiceGovernance.sol
+
+///@audit getChainName(),getTokenManagerAddress(),getValidTokenManagerAddress(),getTokenAddress(),getStandardizedTokenAddress(),getCanonicalTokenId(),getCustomTokenId(),getImplementation(),getParamsLockUnlock(),getParamsMintBurn(),getParamsLiquidityPool(),getFlowLimit(),getFlowOutAmount(),getFlowInAmount(),registerCanonicalToken(),deployRemoteCanonicalToken(),deployCustomTokenManager(),deployRemoteCustomTokenManager(),deployAndRegisterStandardizedToken(),deployAndRegisterRemoteStandardizedToken(),expressReceiveToken(),expressReceiveTokenWithData(),transmitSendToken(),setFlowLimit(),
+FILE: 2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
+
+````
+
+
+
+
+
+
 
 The result of function calls should be cached rather than re-calling the function 3
 
