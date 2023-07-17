@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Chom",
+  "risk": "2",
+  "title": "Possible loss of fund as InterchainProposalExecutor low level call to an EOA address (Deterministic deployment but forget to deploy on that chain) result in success = true",
+  "issueId": 86,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/86"
+}
