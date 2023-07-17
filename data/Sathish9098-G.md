@@ -261,15 +261,6 @@ https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/interchain-
 
 ##
 
-## [G-5] state variables should be cached in stack variables rather than re-reading them from storage
-
-### NOTE: The instances are missed in BOT RACE
-
-The instances below point to the second+ access of a state variable within a function. Caching of a state variable replaces each Gwarmaccess (100 gas) with a much cheaper stack read. Other less obvious fixes/optimizations include having local memory caches of state variable structs, or having local caches of state variable contracts/addresses.
-
-
-##
-
 ## [G-5] Optimize names to save gas
 
 public/external function names and public member variable names can be optimized to save gas. See this [link](https://gist.github.com/IllIllI000/a5d8b486a8259f9f77891a919febd1a9) for an example of how it works. Below are the interfaces/abstract contracts that can be optimized so that the most frequently-called functions use the least amount of gas possible during method lookup. Method IDs that have two leading zero bytes can save 128 gas each during deployment, and renaming functions to have lower method IDs will save 22 gas per call, [per sorted position shifted](https://medium.com/joyso/solidity-how-does-function-name-affect-gas-consumption-in-smart-contract-47d270d8ac92)
@@ -286,32 +277,181 @@ FILE: 2023-07-axelar/contracts/cgp/governance/AxelarServiceGovernance.sol
 FILE: 2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
 
 ````
+## [G-6] Avoid contract existence checks by using low level calls
+
+Prior to 0.8.10 the compiler inserted extra code, including ``EXTCODESIZE`` (100 gas), to check for contract existence for external function calls. In more recent solidity versions, the compiler will not insert these checks if the external call has a return value. Similar behavior can be achieved in earlier versions by using low-level calls, since low level calls never check for contract existence
+
+```solidity
+FILE: Breadcrumbs2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
+
+102: deployer = ITokenManagerDeployer(tokenManagerDeployer_).deployer();
+
+162: tokenManagerAddress = deployer.deployedAddress(address(this), tokenId);
+
+172: if (ITokenManagerProxy(tokenManagerAddress).tokenId() != tokenId) revert TokenManagerDoesNotExist(tokenId);
+
+182: tokenAddress = ITokenManager(tokenManagerAddress).tokenAddress();
+
+193: tokenAddress = deployer.deployedAddress(address(this), tokenId);
+
+277: flowLimit = tokenManager.getFlowLimit();
+
+287: flowOutAmount = tokenManager.getFlowOutAmount();
+
+297: flowInAmount = tokenManager.getFlowInAmount();
+
+311: if (gateway.tokenAddresses(tokenSymbol) == tokenAddress) revert GatewayToken();
+
+331: tokenAddress = ITokenManager(tokenAddress).tokenAddress();
+
+445: if (gateway.isCommandExecuted(commandId)) revert AlreadyExecuted(commandId);
+
+476: if (gateway.isCommandExecuted(commandId)) revert AlreadyExecuted(commandId);
+
+480: IERC20 token = IERC20(tokenManager.tokenAddress());
+
+539: tokenManager.setFlowLimit(flowLimits[i]);
+
+566:  if (ITokenManager(implementation).implementationType() != uint256(tokenManagerType)) revert InvalidTokenManagerImplementation();
+
+610: amount = tokenManager.giveToken(destinationAddress, amount);
+
+653: amount = tokenManager.giveToken(expressCaller, amount);
+
+657: amount = tokenManager.giveToken(destinationAddress, amount);
+
+658: IInterchainTokenExpressExecutable(destinationAddress).executeWithInterchainToken(sourceChain, sourceAddress, data, tokenId, amount);
+
+713: string memory destinationAddress = remoteAddressValidator.getRemoteAddress(destinationChain);
+
+723: gateway.callContract(destinationChain, destinationAddress, payload);
+
+735:  name = token.name();
+
+736: symbol = token.symbol();
+
+737: decimals = token.decimals();
+
+888: IInterchainTokenExpressExecutable(destinationAddress).expressExecuteWithInterchainToken(
+            sourceChain,
+            sourceAddress,
+            data,
+            tokenId,
+            amount
+        );
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token-service/InterchainTokenService.sol#L102
+
+```solidity
+FILE: Breadcrumbs2023-07-axelar/contracts/cgp/AxelarGateway.sol
+
+287: if (AxelarGateway(newImplementation).contractId() != contractId()) revert InvalidImplementation();
+
+317: IAxelarAuth(AUTH_MODULE).transferOperatorship(newOperatorsData);
+
+329: bool allowOperatorshipTransfer = IAxelarAuth(AUTH_MODULE).validateProof(messageHash, proof);
+
+449: depositHandler.destroy(address(this)
+
+496: IAxelarAuth(AUTH_MODULE).transferOperatorship(newOperatorsData);
+
+524: IERC20(tokenAddress).safeTransfer(account, amount);
+
+526: IBurnableMintableCappedERC20(tokenAddress).mint(account, amount);
+
+543: IERC20(tokenAddress).safeTransferFrom(sender, address(this), amount);
+
+545: IERC20(tokenAddress).safeCall(abi.encodeWithSelector(IBurnableMintableCappedERC20.burnFrom.selector, sender, amount));
+
+547: IERC20(tokenAddress).safeTransferFrom(sender, IBurnableMintableCappedERC20(tokenAddress).depositAddress(bytes32(0)), amount);
+
+```
+
+```solidity
+FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalSender.sol
+
+101: gateway.callContract(interchainCall.destinationChain, interchainCall.destinationContract, payload);
+
+```
+
+##
+
+## [G-] Default value initialization
+
+If a variable is not set/initialized, it is assumed to have the default value`` (0, false, 0x0 etc depending on the data type)``.
+Explicitly initializing it with its default value is an anti-pattern and wastes gas.
+
+Saves ``15-20`` GAS per instance 
+
+
+```diff
+FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalSender.sol
+
+- 63: for (uint256 i = 0; i < interchainCalls.length; ) {
++ 63: for (uint256 i; i < interchainCalls.length; ) {
+
+- 105: uint256 totalGas = 0;
++ 105: uint256 totalGas ;
+
+- 106: for (uint256 i = 0; i < interchainCalls.length; ) {
++ 106: for (uint256 i ; i < interchainCalls.length; ) {
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalSender.sol#L63
+
+```diff
+FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalExecutor.sol
+
+- 74: for (uint256 i = 0; i < calls.length; i++) {
++ 74: for (uint256 i ; i < calls.length; i++) {
+
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalExecutor.sol#L74
+
+##
+
+## [G-] ``Calldata`` pointer Saves more gas than ``memory`` pointer
+
+Calling ``calldata`` instead of ``memory`` in the loop you have shown will save gas. This is because ``calldata`` is a read-only data structure, which means that it does not have to be copied into memory each time it is accessed.
+
+## ``InterchainProposalExecutor.sol``: Use ```calldata`` instead of ``memory`` : Saves ``224 GAS`` Per iteration
+
+```diff
+FILE: Breadcrumbs2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalExecutor.sol
+
+74: for (uint256 i = 0; i < calls.length; i++) {
+- 75:            InterchainCalls.Call memory call = calls[i];
++ 75:            InterchainCalls.Call calldata call = calls[i];
+76:            (bool success, bytes memory result) = call.target.call{ value: call.value }(call.callData);
+77:
+78:            if (!success) {
+79:                _onTargetExecutionFailed(call, result);
+80:            } else {
+81:                _onTargetExecuted(call, result);
+82:            }
+
+```
 
 
 
+## [G-] Use constants instead of type(uintX).max
+
+Using constants instead of type(uintX).max saves gas in Solidity. This is because the type(uintX).max function has to dynamically calculate the maximum value of a uint256, which can be expensive in terms of gas. Constants, on the other hand, are stored in the bytecode of your contract, so they do not have to be recalculated every time you need them.
+
+```solidity
+FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalExecutor.sol
 
 
 
+```
 
-The result of function calls should be cached rather than re-calling the function 3
+## Cheaper input valdiations should come before expensive operations
 
-Using storage instead of memory for structs/arrays saves gas
+## Amounts should be checked for 0 before calling a transfer
 
-Only missing instances 
+Checking non-zero transfer values can avoid an expensive external call and save gas.
 
-Multiple accesses of a mapping/array should use a local variable cache
+Use calldata instead of memory in the loops . If the local variable value not changed inside the loop 
 
- <x> += <y>/<x> -= <y> costs more gas than <x> = <x> + <y>/<x> = <x> - <y> for state variables  
-
-Avoid contract existence check 
-
-Don't initialize default values to variables 
-
-Use constants instead of type(uint256).max
-
-[GAS-16]	State variables used within a function more than once should be cached to save gas
-[GAS-17]	Mappings used within a function more than once should be cached to save gas
-
-
-
- 
+ InterchainProposalExecutor.sol  for loop 
