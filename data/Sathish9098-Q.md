@@ -34,6 +34,8 @@ Missing Return Values- some tokens not return any values
 
 Use ownable2step instead of normal ownable 
 
+Use abi.encode to avoid hash collision for dynamic values 
+
 # NON CRITICAL FINDINGS
 
 ##
