@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "0xAleko",
+  "risk": "2",
+  "title": "Incorrect Logical Operator in onlyMintLimiter Modifier - AxelarGateway.sol",
+  "issueId": 54,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/54"
+}
