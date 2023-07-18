@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Matin",
+  "risk": "2",
+  "title": "Axelar proxy contract doesn't check the implementation contract code size when setting the address in the constructor",
+  "issueId": 99,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/99"
+}
