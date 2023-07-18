@@ -1,8 +1,6 @@
 
 # Divide by zero should be avoided 
 
-# Event is missing the indexed field 
-
 # Use safeTranfer/SafetranferFrom
 
 # Return values of transfer functions should be checked 
