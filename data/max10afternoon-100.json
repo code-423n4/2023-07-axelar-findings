@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "max10afternoon",
+  "risk": "3",
+  "title": "ITS: Standardized tokens deployed with deployRemoteCanonicalToken cannot have liquidity, making the bridge unusable for that asset, and locking tokens on sending chain",
+  "issueId": 100,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/100"
+}
