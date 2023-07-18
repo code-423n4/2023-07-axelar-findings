@@ -1,9 +1,26 @@
 
 # GAS OPTIMIZATIONS
 
+| GAS COUNT | Issues | Instances | Gas Saved |
+|------------------|------------------|------------------|------------------|
+| [G-1]    | Using ``calldata`` instead of ``memory`` for read-only arguments in external functions saves gas|8|    2820 |
+| [G-2]    | Avoiding the overhead of bool storage    | 5     | 100500    |
+| [G-3]    | Avoid contract existence checks by using low level calls   | 37     | 3700 |
+| [G-4]    | Use ``calldata`` pointer Saves more gas than ``memory`` pointer   | 2 | 600 GAS (Per Iteration) |
+| [G-5]    | IF’s/require() statements that check input arguments should be at the top of the function| 2| 300 |
+| [G-6]    | Functions guaranteed to revert when called by normal users can be marked ``payable``  | 11 | 231 |
+| [G-7]    | Optimize names to save gas  |  27   | - |
+| [G-8]    | Default value initialization  | 4    | 80    |
+| [G-9]    | Use constants instead of type(uintX).max    | 7 | 91|
+| [G-10]    | Splitting require()/if() statements that use && saves gas    | 4    | 52    |
+| [G-11]    | Caching global variables is more expensive than using the actual variable (use msg.sender instead of caching it)  | 10    | -   |
+| [G-12]    | Row 1, Col 2     | Row 1, Col 3     | Row 1, Col 3     |
+| [G-13]    | Row 1, Col 2     | Row 1, Col 3     | Row 1, Col 3     |
 ##
 
 ## [G-1] Using calldata instead of memory for read-only arguments in external functions saves gas
+
+Saves ``2820 GAS``, ``8 Instances``
 
 When a function with a memory array is called externally, the ``abi.decode()`` step has to use a for-loop to copy each index of the ``calldata`` to the ``memory`` index. Each iteration of this for-loop costs at least 60 gas ``(i.e. 60 * <mem_array>.length)``. Using ``calldata`` directly, obliviates the need for such a loop in the contract code and runtime execution. Note that even if an interface defines a function as having memory arguments, it’s still valid for implementation contracts to use ``calldata`` arguments instead.
 
@@ -113,6 +130,8 @@ FILE: Breadcrumbs2023-07-axelar/contracts/gmp-sdk/deploy/ConstAddressDeployer.so
 
 ## [G-2] Avoiding the overhead of bool storage 
 
+Saves ``100500 GAS``, ``5 Instances``
+
 ```
     // Booleans are more expensive than uint256 or any type that takes up a full
     // word because each write operation emits an extra SLOAD to first read the
@@ -150,7 +169,201 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 
 ##
 
-## [G-3] Functions guaranteed to revert when called by normal users can be marked ``payable`` 
+## [G-3] Avoid contract existence checks by using low level calls
+
+Saves ``3700 GAS``, ``37 Instances``
+
+Prior to 0.8.10 the compiler inserted extra code, including ``EXTCODESIZE`` (100 gas), to check for contract existence for external function calls. In more recent solidity versions, the compiler will not insert these checks if the external call has a return value. Similar behavior can be achieved in earlier versions by using low-level calls, since low level calls never check for contract existence
+
+```solidity
+FILE: Breadcrumbs2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
+
+102: deployer = ITokenManagerDeployer(tokenManagerDeployer_).deployer();
+
+162: tokenManagerAddress = deployer.deployedAddress(address(this), tokenId);
+
+172: if (ITokenManagerProxy(tokenManagerAddress).tokenId() != tokenId) revert TokenManagerDoesNotExist(tokenId);
+
+182: tokenAddress = ITokenManager(tokenManagerAddress).tokenAddress();
+
+193: tokenAddress = deployer.deployedAddress(address(this), tokenId);
+
+277: flowLimit = tokenManager.getFlowLimit();
+
+287: flowOutAmount = tokenManager.getFlowOutAmount();
+
+297: flowInAmount = tokenManager.getFlowInAmount();
+
+311: if (gateway.tokenAddresses(tokenSymbol) == tokenAddress) revert GatewayToken();
+
+331: tokenAddress = ITokenManager(tokenAddress).tokenAddress();
+
+445: if (gateway.isCommandExecuted(commandId)) revert AlreadyExecuted(commandId);
+
+476: if (gateway.isCommandExecuted(commandId)) revert AlreadyExecuted(commandId);
+
+480: IERC20 token = IERC20(tokenManager.tokenAddress());
+
+539: tokenManager.setFlowLimit(flowLimits[i]);
+
+566:  if (ITokenManager(implementation).implementationType() != uint256(tokenManagerType)) revert InvalidTokenManagerImplementation();
+
+610: amount = tokenManager.giveToken(destinationAddress, amount);
+
+653: amount = tokenManager.giveToken(expressCaller, amount);
+
+657: amount = tokenManager.giveToken(destinationAddress, amount);
+
+658: IInterchainTokenExpressExecutable(destinationAddress).executeWithInterchainToken(sourceChain, sourceAddress, data, tokenId, amount);
+
+713: string memory destinationAddress = remoteAddressValidator.getRemoteAddress(destinationChain);
+
+723: gateway.callContract(destinationChain, destinationAddress, payload);
+
+735:  name = token.name();
+
+736: symbol = token.symbol();
+
+737: decimals = token.decimals();
+
+888: IInterchainTokenExpressExecutable(destinationAddress).expressExecuteWithInterchainToken(
+            sourceChain,
+            sourceAddress,
+            data,
+            tokenId,
+            amount
+        );
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token-service/InterchainTokenService.sol#L102
+
+```solidity
+FILE: Breadcrumbs2023-07-axelar/contracts/cgp/AxelarGateway.sol
+
+287: if (AxelarGateway(newImplementation).contractId() != contractId()) revert InvalidImplementation();
+
+317: IAxelarAuth(AUTH_MODULE).transferOperatorship(newOperatorsData);
+
+329: bool allowOperatorshipTransfer = IAxelarAuth(AUTH_MODULE).validateProof(messageHash, proof);
+
+449: depositHandler.destroy(address(this)
+
+496: IAxelarAuth(AUTH_MODULE).transferOperatorship(newOperatorsData);
+
+524: IERC20(tokenAddress).safeTransfer(account, amount);
+
+526: IBurnableMintableCappedERC20(tokenAddress).mint(account, amount);
+
+543: IERC20(tokenAddress).safeTransferFrom(sender, address(this), amount);
+
+545: IERC20(tokenAddress).safeCall(abi.encodeWithSelector(IBurnableMintableCappedERC20.burnFrom.selector, sender, amount));
+
+547: IERC20(tokenAddress).safeTransferFrom(sender, IBurnableMintableCappedERC20(tokenAddress).depositAddress(bytes32(0)), amount);
+
+```
+
+```solidity
+FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalSender.sol
+
+101: gateway.callContract(interchainCall.destinationChain, interchainCall.destinationContract, payload);
+
+```
+
+##
+
+## [G-4] Use ``Calldata`` pointer Saves more gas than ``memory`` pointer
+
+Saves ``600 GAS``, ``per Loop Iterations``
+
+Calling ``calldata`` instead of ``memory`` in the loop you have shown will save gas. This is because ``calldata`` is a read-only data structure, which means that it does not have to be copied into memory each time it is accessed.
+
+## ``InterchainProposalExecutor.sol``: Use ```calldata`` instead of ``memory`` : Saves ``250-300 GAS`` Per iteration
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalExecutor.sol#L75
+
+``call`` value is not changed any where inside the loop. So ``calldata`` is more efficient than ``memory`` to save gas 
+
+```diff
+FILE: Breadcrumbs2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalExecutor.sol
+
+74: for (uint256 i = 0; i < calls.length; i++) {
+- 75:            InterchainCalls.Call memory call = calls[i];
++ 75:            InterchainCalls.Call calldata call = calls[i];
+76:            (bool success, bytes memory result) = call.target.call{ value: call.value }(call.callData);
+77:
+78:            if (!success) {
+79:                _onTargetExecutionFailed(call, result);
+80:            } else {
+81:                _onTargetExecuted(call, result);
+82:            }
+
+```
+## ``AxelarGateway.sol``: Use ```calldata`` instead of ``memory`` : Saves ``250-300 GAS`` Per iteration
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L270-L277
+
+``symbol`` value is not changed any where inside the loop. So ``calldata`` is more efficient than ``memory`` to save gas 
+
+
+```diff
+FILE: 2023-07-axelar/contracts/cgp/AxelarGateway.sol
+
+270: for (uint256 i; i < length; ++i) {
+- 271:            string memory symbol = symbols[i];
++ 271:            string calldata symbol = symbols[i];
+272:            uint256 limit = limits[i];
+273:
+274:            if (tokenAddresses(symbol) == address(0)) revert TokenDoesNotExist(symbol);
+275:
+276:            _setTokenMintLimit(symbol, limit);
+277:        }
+
+```
+##
+
+## [G-5] IF’s/require() statements that check input arguments should be at the top of the function
+
+Saves ``300 GAS``, ``2 Instance``
+
+Checks that involve constants should come before checks that involve state variables, function calls, and calculations. By doing these checks first, the function is able to revert before wasting a Gcoldsload (2100 gas) in a function that may ultimately revert in the unhappy case.
+
+### Cheaper to check the function parameter before making check . Saves ``200- 300  GAS``
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/auth/MultisigBase.sol#L172-L173
+
+```diff
+FILE: 2023-07-axelar/contracts/cgp/auth/MultisigBase.sol
+
+169:  address account = newAccounts[i];
+170:
+171: // Check that the account wasn't already set as a signer for this epoch.
++ 273: if (account == address(0)) revert InvalidSigners();
+- 172: if (signers.isSigner[account]) revert DuplicateSigner(account);
+- 273: if (account == address(0)) revert InvalidSigners();
++ 172: if (signers.isSigner[account]) revert DuplicateSigner(account);
+
+```
+
+### tokenAddresses(symbol) == address(0) should be checked before ``limit`` to avoid unnecessary variable creation. After variable creation if any fails its waste of gas 
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L271-L274
+
+```diff
+FILE: 2023-07-axelar/contracts/cgp/AxelarGateway.sol
+
+271: string memory symbol = symbols[i];
++ 274: if (tokenAddresses(symbol) == address(0)) revert TokenDoesNotExist(symbol);
+272: uint256 limit = limits[i];
+273:
+- 274: if (tokenAddresses(symbol) == address(0)) revert TokenDoesNotExist(symbol);
+
+```
+
+##
+
+## [G-6] Functions guaranteed to revert when called by normal users can be marked ``payable`` 
+
+Saves ``231 GAS``, ``11 Instance``
 
 If a function modifier such as ``onlyOwner`` is used, the function will revert if a normal user tries to pay the function. Marking the function as payable will lower the gas cost for legitimate callers because the compiler will not include checks for whether a payment was provided. The extra opcodes avoided are ``CALLVALUE(2),DUP1(3),ISZERO(3),PUSH2(3),JUMPI(10),PUSH1(3),DUP1(3),REVERT(0),JUMPDEST(1),POP(2)``, which costs an average of about 21 gas per call to the function, in addition to the extra deployment cost
 
@@ -261,7 +474,9 @@ https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/interchain-
 
 ##
 
-## [G-5] Optimize names to save gas
+## [G-7] Optimize names to save gas
+
+Saves ``27 Instances``
 
 public/external function names and public member variable names can be optimized to save gas. See this [link](https://gist.github.com/IllIllI000/a5d8b486a8259f9f77891a919febd1a9) for an example of how it works. Below are the interfaces/abstract contracts that can be optimized so that the most frequently-called functions use the least amount of gas possible during method lookup. Method IDs that have two leading zero bytes can save 128 gas each during deployment, and renaming functions to have lower method IDs will save 22 gas per call, [per sorted position shifted](https://medium.com/joyso/solidity-how-does-function-name-affect-gas-consumption-in-smart-contract-47d270d8ac92)
 
@@ -276,108 +491,14 @@ FILE: 2023-07-axelar/contracts/cgp/governance/AxelarServiceGovernance.sol
 ///@audit getChainName(),getTokenManagerAddress(),getValidTokenManagerAddress(),getTokenAddress(),getStandardizedTokenAddress(),getCanonicalTokenId(),getCustomTokenId(),getImplementation(),getParamsLockUnlock(),getParamsMintBurn(),getParamsLiquidityPool(),getFlowLimit(),getFlowOutAmount(),getFlowInAmount(),registerCanonicalToken(),deployRemoteCanonicalToken(),deployCustomTokenManager(),deployRemoteCustomTokenManager(),deployAndRegisterStandardizedToken(),deployAndRegisterRemoteStandardizedToken(),expressReceiveToken(),expressReceiveTokenWithData(),transmitSendToken(),setFlowLimit(),
 FILE: 2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
 
-````
-## [G-6] Avoid contract existence checks by using low level calls
-
-Prior to 0.8.10 the compiler inserted extra code, including ``EXTCODESIZE`` (100 gas), to check for contract existence for external function calls. In more recent solidity versions, the compiler will not insert these checks if the external call has a return value. Similar behavior can be achieved in earlier versions by using low-level calls, since low level calls never check for contract existence
-
-```solidity
-FILE: Breadcrumbs2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
-
-102: deployer = ITokenManagerDeployer(tokenManagerDeployer_).deployer();
-
-162: tokenManagerAddress = deployer.deployedAddress(address(this), tokenId);
-
-172: if (ITokenManagerProxy(tokenManagerAddress).tokenId() != tokenId) revert TokenManagerDoesNotExist(tokenId);
-
-182: tokenAddress = ITokenManager(tokenManagerAddress).tokenAddress();
-
-193: tokenAddress = deployer.deployedAddress(address(this), tokenId);
-
-277: flowLimit = tokenManager.getFlowLimit();
-
-287: flowOutAmount = tokenManager.getFlowOutAmount();
-
-297: flowInAmount = tokenManager.getFlowInAmount();
-
-311: if (gateway.tokenAddresses(tokenSymbol) == tokenAddress) revert GatewayToken();
-
-331: tokenAddress = ITokenManager(tokenAddress).tokenAddress();
-
-445: if (gateway.isCommandExecuted(commandId)) revert AlreadyExecuted(commandId);
-
-476: if (gateway.isCommandExecuted(commandId)) revert AlreadyExecuted(commandId);
-
-480: IERC20 token = IERC20(tokenManager.tokenAddress());
-
-539: tokenManager.setFlowLimit(flowLimits[i]);
-
-566:  if (ITokenManager(implementation).implementationType() != uint256(tokenManagerType)) revert InvalidTokenManagerImplementation();
-
-610: amount = tokenManager.giveToken(destinationAddress, amount);
-
-653: amount = tokenManager.giveToken(expressCaller, amount);
-
-657: amount = tokenManager.giveToken(destinationAddress, amount);
-
-658: IInterchainTokenExpressExecutable(destinationAddress).executeWithInterchainToken(sourceChain, sourceAddress, data, tokenId, amount);
-
-713: string memory destinationAddress = remoteAddressValidator.getRemoteAddress(destinationChain);
-
-723: gateway.callContract(destinationChain, destinationAddress, payload);
-
-735:  name = token.name();
-
-736: symbol = token.symbol();
-
-737: decimals = token.decimals();
-
-888: IInterchainTokenExpressExecutable(destinationAddress).expressExecuteWithInterchainToken(
-            sourceChain,
-            sourceAddress,
-            data,
-            tokenId,
-            amount
-        );
-
-```
-https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token-service/InterchainTokenService.sol#L102
-
-```solidity
-FILE: Breadcrumbs2023-07-axelar/contracts/cgp/AxelarGateway.sol
-
-287: if (AxelarGateway(newImplementation).contractId() != contractId()) revert InvalidImplementation();
-
-317: IAxelarAuth(AUTH_MODULE).transferOperatorship(newOperatorsData);
-
-329: bool allowOperatorshipTransfer = IAxelarAuth(AUTH_MODULE).validateProof(messageHash, proof);
-
-449: depositHandler.destroy(address(this)
-
-496: IAxelarAuth(AUTH_MODULE).transferOperatorship(newOperatorsData);
-
-524: IERC20(tokenAddress).safeTransfer(account, amount);
-
-526: IBurnableMintableCappedERC20(tokenAddress).mint(account, amount);
-
-543: IERC20(tokenAddress).safeTransferFrom(sender, address(this), amount);
-
-545: IERC20(tokenAddress).safeCall(abi.encodeWithSelector(IBurnableMintableCappedERC20.burnFrom.selector, sender, amount));
-
-547: IERC20(tokenAddress).safeTransferFrom(sender, IBurnableMintableCappedERC20(tokenAddress).depositAddress(bytes32(0)), amount);
-
 ```
 
-```solidity
-FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalSender.sol
-
-101: gateway.callContract(interchainCall.destinationChain, interchainCall.destinationContract, payload);
-
-```
 
 ##
 
-## [G-] Default value initialization
+## [G-8] Default value initialization
+
+Saves ``80 GAS``,``4 Instance``
 
 If a variable is not set/initialized, it is assumed to have the default value`` (0, false, 0x0 etc depending on the data type)``.
 Explicitly initializing it with its default value is an anti-pattern and wastes gas.
@@ -411,47 +532,131 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 
 ##
 
-## [G-] ``Calldata`` pointer Saves more gas than ``memory`` pointer
+## [G-9] Use constants instead of type(uintX).max
 
-Calling ``calldata`` instead of ``memory`` in the loop you have shown will save gas. This is because ``calldata`` is a read-only data structure, which means that it does not have to be copied into memory each time it is accessed.
+Saves ``91 GAS``,``7 Instance``
 
-## ``InterchainProposalExecutor.sol``: Use ```calldata`` instead of ``memory`` : Saves ``224 GAS`` Per iteration
-
-```diff
-FILE: Breadcrumbs2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalExecutor.sol
-
-74: for (uint256 i = 0; i < calls.length; i++) {
-- 75:            InterchainCalls.Call memory call = calls[i];
-+ 75:            InterchainCalls.Call calldata call = calls[i];
-76:            (bool success, bytes memory result) = call.target.call{ value: call.value }(call.callData);
-77:
-78:            if (!success) {
-79:                _onTargetExecutionFailed(call, result);
-80:            } else {
-81:                _onTargetExecuted(call, result);
-82:            }
-
-```
-
-
-
-## [G-] Use constants instead of type(uintX).max
-
-Using constants instead of type(uintX).max saves gas in Solidity. This is because the type(uintX).max function has to dynamically calculate the maximum value of a uint256, which can be expensive in terms of gas. Constants, on the other hand, are stored in the bytecode of your contract, so they do not have to be recalculated every time you need them.
+Using constants instead of type(uintX).max saves gas in Solidity. This is because the type(uintX).max function has to dynamically calculate the maximum value of a uint256, which can be expensive in terms of gas. Constants, on the other hand, are stored in the bytecode of your contract, so they do not have to be recalculated every time you need them. Saves ``13 GAS``
 
 ```solidity
-FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalExecutor.sol
+FILE: 2023-07-axelar/contracts/its/interchain-token/InterchainToken.sol
 
+56:  if (allowance_ != type(uint256).max) {
 
+57:  if (allowance_ > type(uint256).max - amount) {
+
+58:  allowance_ = type(uint256).max - amount;
+
+88: if (_allowance != type(uint256).max) {
+
+95: if (allowance_ != type(uint256).max) {
+
+96: if (allowance_ > type(uint256).max - amount) {
+                    
+97: allowance_ = type(uint256).max - amount;
 
 ```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token/InterchainToken.sol#L56-L58
 
-## Cheaper input valdiations should come before expensive operations
 
-## Amounts should be checked for 0 before calling a transfer
+##
 
-Checking non-zero transfer values can avoid an expensive external call and save gas.
+## [G-10] Splitting require()/if() statements that use && saves gas
 
-Use calldata instead of memory in the loops . If the local variable value not changed inside the loop 
+Saves ``52 GAS``,``4 Instance``
 
- InterchainProposalExecutor.sol  for loop 
+See this [issue](https://github.com/code-423n4/2022-01-xdefi-findings/issues/128) which describes the fact that there is a larger deployment gas cost, but with enough runtime calls, the change ends up being cheaper by 13 gas
+
+```diff
+FILE: 2023-07-axelar/contracts/its/remote-address-validator/RemoteAddressValidator.sol
+
+58:  if ((b >= 65) && (b <= 70)) bytes(s)[i] = bytes1(b + uint8(32));
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/remote-address-validator/RemoteAddressValidator.sol#L58
+
+```diff
+FILE: 2023-07-axelar/contracts/cgp/AxelarGateway.sol
+
+88: if (msg.sender != getAddress(KEY_MINT_LIMITER) && msg.sender != getAddress(KEY_GOVERNANCE)) revert NotMintLimiter();
+
+446: if (!success || (returnData.length != uint256(0) && !abi.decode(returnData, (bool)))) revert BurnFailed(symbol);
+
+635: if (limit > 0 && amount > limit) revert ExceedMintLimit(symbol);
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L88
+
+## 
+
+## [G-11] Caching global variables is more expensive than using the actual variable (use msg.sender instead of caching it)
+
+The ``msg.sender`` variable is a special variable that always refers to the address of the sender of the current transaction. This variable is not stored in memory, so it is much cheaper to use than a cached global variable.
+
+```diff
+FILE: Breadcrumbs2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
+
+- 348:  address deployer_ = msg.sender;
+- 349:        tokenId = getCustomTokenId(deployer_, salt);
++ 349:        tokenId = getCustomTokenId(msg.sender, salt);
+350:        _deployTokenManager(tokenId, tokenManagerType, params);
+- 351:        emit CustomTokenIdClaimed(tokenId, deployer_, salt);
++ 351:        emit CustomTokenIdClaimed(tokenId, msg.sender, salt);
+
+
+-        address deployer_ = msg.sender;
+-         tokenId = getCustomTokenId(deployer_, salt);
++         tokenId = getCustomTokenId(msg.sender, salt);
+        _deployRemoteTokenManager(tokenId, destinationChain, gasValue, tokenManagerType, params);
+-        emit CustomTokenIdClaimed(tokenId, deployer_, salt);
++        emit CustomTokenIdClaimed(tokenId, msg.sender, salt);
+
+
+-  address caller = msg.sender;
+        ITokenManager tokenManager = ITokenManager(getValidTokenManagerAddress(tokenId));
+        IERC20 token = IERC20(tokenManager.tokenAddress());
+
+-        SafeTokenTransferFrom.safeTransferFrom(token, caller, destinationAddress, amount);
++        SafeTokenTransferFrom.safeTransferFrom(token, msg.sender, destinationAddress, amount);
+-        _setExpressReceiveToken(tokenId, destinationAddress, amount, commandId, caller);
++   _setExpressReceiveToken(tokenId, destinationAddress, amount, commandId, msg.sender);
+
+
+- address caller = msg.sender;
+        ITokenManager tokenManager = ITokenManager(getValidTokenManagerAddress(tokenId));
+        IERC20 token = IERC20(tokenManager.tokenAddress());
+
+-        SafeTokenTransferFrom.safeTransferFrom(token, caller, destinationAddress, amount);
++        SafeTokenTransferFrom.safeTransferFrom(token, msg.sender, destinationAddress, amount);
+        _expressExecuteWithInterchainTokenToken(tokenId, destinationAddress, sourceChain, sourceAddress, data, amount);
+
+-        _setExpressReceiveTokenWithData(tokenId, sourceChain, sourceAddress, destinationAddress, amount, data, commandId, caller);
++        _setExpressReceiveTokenWithData(tokenId, sourceChain, sourceAddress, destinationAddress, amount, data, commandId, msg.sender);
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token-service/InterchainTokenService.sol#L372-L375
+
+```diff
+FILE: Breadcrumbs2023-07-axelar/contracts/its/interchain-token/InterchainToken.sol
+
+- address sender = msg.sender;
+        ITokenManager tokenManager = getTokenManager();
+        /**
+         * @dev if you know the value of `tokenManagerRequiresApproval()` you can just skip the if statement and just do nothing or _approve.
+         */
+        if (tokenManagerRequiresApproval()) {
+-            uint256 allowance_ = allowance[sender][address(tokenManager)];-            
++           uint256 allowance_ = allowance[msg.sender][address(tokenManager)];
+            if (allowance_ != type(uint256).max) {
+                if (allowance_ > type(uint256).max - amount) {
+                    allowance_ = type(uint256).max - amount;
+                }
+
+-                _approve(sender, address(tokenManager), allowance_ + amount);
++                _approve(msg.sender, address(tokenManager), allowance_ + amount);
+            }
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token/InterchainToken.sol#L49
+
+
+
