@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "MrPotatoMagic",
+  "risk": "2",
+  "title": "Missing EOA check can allow a malicious signer to freeze usage of governance functions",
+  "issueId": 110,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/110"
+}
