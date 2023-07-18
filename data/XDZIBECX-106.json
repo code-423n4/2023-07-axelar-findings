@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "XDZIBECX",
+  "risk": "3",
+  "title": " _beforeProposalExecuted and _onProposalExecuted  two callback functions can be overridden in derived contracts to handle the payload",
+  "issueId": 106,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/106"
+}
