@@ -79,6 +79,8 @@ https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/interchain-
 https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/interchain-token-service/InterchainTokenService.sol#L251
 
 8.`getParamsLiquidityPool` and `getParamsMintBurn` can be computed directly on the frontend to save more gas fee.
+https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/interchain-token-service/InterchainTokenService.sol#L262#L268
+https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/interchain-token-service/InterchainTokenService.sol#L251#L253
 
 9.Caching global variables is more expensive than using the actual variable (use msg.sender instead of caching it)
 https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/token-manager/TokenManager.sol#L115
