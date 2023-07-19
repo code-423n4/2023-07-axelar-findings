@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "MrPotatoMagic",
+  "risk": "3",
+  "title": " sendProposals() reverts even if enough ETH is provided to carry out execution and permanently locks ETH sent by caller",
+  "issueId": 147,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/147"
+}
