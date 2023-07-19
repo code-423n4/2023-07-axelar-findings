@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "bigtone",
+  "risk": "2",
+  "title": "If depositHandlerAddress has code, it should be reverted instead of return in the `burnToken` function in AxelarGateway.",
+  "issueId": 153,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/153"
+}
