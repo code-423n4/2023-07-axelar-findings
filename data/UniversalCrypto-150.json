@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "UniversalCrypto",
+  "risk": "3",
+  "title": "It is not possible to execute proposals that require ETH in `InterchainProposalExecutor`",
+  "issueId": 150,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/150"
+}
