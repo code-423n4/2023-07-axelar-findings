@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "pcarranzav",
+  "risk": "2",
+  "title": "Multisig can execute the same proposal repeatedly",
+  "issueId": 116,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/116"
+}
