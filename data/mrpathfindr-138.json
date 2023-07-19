@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "mrpathfindr",
+  "risk": "2",
+  "title": "Logic Error: Signers who have already voted will be unable to call rotateSigners()",
+  "issueId": 138,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/138"
+}
