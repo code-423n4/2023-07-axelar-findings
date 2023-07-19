@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "pcarranzav",
+  "risk": "2",
+  "title": "Out-of-order reception of interchain messages could lead to unwanted proposal execution",
+  "issueId": 117,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/117"
+}
