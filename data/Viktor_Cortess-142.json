@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Viktor_Cortess",
+  "risk": "3",
+  "title": "Functions deployRemoteCanonicalToken(), deployAndRegisterRemoteStandardizedToken() and deployRemoteCustomTokenManager()  allow steeling funds from the contract using gas refund",
+  "issueId": 142,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/142"
+}
