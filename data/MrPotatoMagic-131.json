@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "MrPotatoMagic",
+  "risk": "3",
+  "title": "A malicious signer can deplete ETH stored in the MultiSig.sol contract",
+  "issueId": 131,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/131"
+}
