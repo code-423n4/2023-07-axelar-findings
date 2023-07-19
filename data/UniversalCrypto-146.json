@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "UniversalCrypto",
+  "risk": "2",
+  "title": "`minimumTimeDelay` is not enforced to have a minimum value, breaking the protocol's intended use",
+  "issueId": 146,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/146"
+}
