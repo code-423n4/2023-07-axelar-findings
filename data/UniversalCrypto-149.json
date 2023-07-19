@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "UniversalCrypto",
+  "risk": "2",
+  "title": "incoming proposals from non-evm sources may permanently fail to be executed",
+  "issueId": 149,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/149"
+}
