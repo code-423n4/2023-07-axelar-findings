@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "MrPotatoMagic",
+  "risk": "3",
+  "title": "Parameter datatype mismatch permanently disables deployment of token managers and locks deployer's sent ETH ",
+  "issueId": 140,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/140"
+}
