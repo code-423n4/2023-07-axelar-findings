@@ -3,22 +3,59 @@
 
 | GAS COUNT | Issues | Instances | Gas Saved |
 |------------------|------------------|------------------|------------------|
-| [G-1]    | Using ``calldata`` instead of ``memory`` for read-only arguments in external functions saves gas|8|    2820 |
-| [G-2]    | Avoiding the overhead of bool storage    | 5     | 100500    |
-| [G-3]    | Avoid contract existence checks by using low level calls   | 37     | 3700 |
-| [G-4]    | Use ``calldata`` pointer Saves more gas than ``memory`` pointer   | 2 | 600 GAS (Per Iteration) |
-| [G-5]    | IF’s/require() statements that check input arguments should be at the top of the function| 2| 300 |
-| [G-6]    | Functions guaranteed to revert when called by normal users can be marked ``payable``  | 11 | 231 |
-| [G-7]    | Optimize names to save gas  |  27   | - |
-| [G-8]    | Default value initialization  | 4    | 80    |
-| [G-9]    | Use constants instead of type(uintX).max    | 7 | 91|
-| [G-10]    | Splitting require()/if() statements that use && saves gas    | 4    | 52    |
-| [G-11]    | Caching global variables is more expensive than using the actual variable (use msg.sender instead of caching it)  | 10    | -   |
-| [G-12]    | Row 1, Col 2     | Row 1, Col 3     | Row 1, Col 3     |
-| [G-13]    | Row 1, Col 2     | Row 1, Col 3     | Row 1, Col 3     |
+| [G-1]    |  Multiple address mappings can be combined into a single mapping of an address to a struct, where appropriate |1|    21018  |
+| [G-2]    | Using ``calldata`` instead of ``memory`` for read-only arguments in external functions saves gas|8|    2820 |
+| [G-3]    | Avoiding the overhead of ``bool`` storage    | 6 | 100600    |
+| [G-4]    | Avoid ``contract existence`` checks by using low level calls   | 37     | 3700 |
+| [G-5]    | Use ``calldata`` pointer Saves more gas than ``memory`` pointer   | 2 | 600 GAS (Per Iteration) |
+| [G-6]    | ``IF’s/require()`` statements that check input arguments should be at the ``top`` of the function| 2| 300 |
+| [G-7]    | Functions guaranteed to revert when called by normal users can be marked ``payable``  | 11 | 231 |
+| [G-8]    | Optimize ``names`` to save gas  |  27   | - |
+| [G-9]    | Default value initialization  | 4    | 80    |
+| [G-10]    | Use constants instead of ``type(uintX).max``    | 7 | 91|
+| [G-11]    | Splitting ``require()/if()`` statements that use ``&&`` saves gas    | 4    | 52    |
+| [G-12]    | Caching ``global variables`` is more expensive than using the actual variable (use ``msg.sender`` instead of caching it)  | 10    | -   |
+
 ##
 
-## [G-1] Using calldata instead of memory for read-only arguments in external functions saves gas
+## [G-1] Multiple address mappings can be combined into a single mapping of an address to a struct, where appropriate
+
+We can combine multiple mappings below into structs. We can then pack the structs by modifying the uint type for the values. This will result in cheaper storage reads since multiple mappings are accessed in functions and those values are now occupying the same storage slot, meaning the slot will become warm after the first ``SLOAD``. In addition, when writing to and reading from the struct values we will avoid a ``Gsset (20000 gas)`` and ``Gcoldsload (2100 gas)``, since multiple struct values are now occupying the same slot.
+
+### ``RemoteAddressValidator.sol``: struct can be used for ``remoteAddressHashes``,``remoteAddresses`` since they are using same ``string`` as key. Also both mapping always used together in a same functions like ``addTrustedAddress()``, ``removeTrustedAddress()`` So ``struct`` is more efficient than ``mapping``. As per gas tests this will save ``21018 GAS``
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/remote-address-validator/RemoteAddressValidator.sol#L15-L16
+
+
+```diff
+FILE: 2023-07-axelar/contracts/its/remote-address-validator/RemoteAddressValidator.sol
+
+- 15: mapping(string => bytes32) public remoteAddressHashes;
+- 16: mapping(string => string) public remoteAddresses;
+
++ struct RemoteAddressData {
++    bytes32 addressHash;
++    string addressString;
++ }
+
++ mapping(string => RemoteAddressData) public remoteAddressData;
+
+```
+
+###
+
+
+```diff
+FILE: Breadcrumbs2023-07-axelar/contracts/its/remote-address-validator/RemoteAddressValidator.sol
+
+15: mapping(string => bytes32) public remoteAddressHashes;
+16: mapping(string => string) public remoteAddresses;
+
+```
+
+##
+
+## [G-2] Using calldata instead of memory for read-only arguments in external functions saves gas
 
 Saves ``2820 GAS``, ``8 Instances``
 
@@ -128,9 +165,9 @@ FILE: Breadcrumbs2023-07-axelar/contracts/gmp-sdk/deploy/ConstAddressDeployer.so
 
 ```
 
-## [G-2] Avoiding the overhead of bool storage 
+## [G-3] Avoiding the overhead of bool storage 
 
-Saves ``100500 GAS``, ``5 Instances``
+Saves ``120600 GAS``, ``6 Instances``
 
 ```
     // Booleans are more expensive than uint256 or any type that takes up a full
@@ -157,6 +194,7 @@ FILE: 2023-07-axelar/contracts/cgp/governance/AxelarServiceGovernance.sol
 22: mapping(bytes32 => bool) public multisigApprovals;
 
 ```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/governance/AxelarServiceGovernance.sol#L22
 
 ```solidity
 FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposalExecutor.sol
@@ -167,9 +205,17 @@ FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposal
 ```
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalExecutor.sol#L24
 
+```solidity
+FILE: 2023-07-axelar/contracts/its/remote-address-validator/RemoteAddressValidator.sol
+
+19: mapping(string => bool) public supportedByGateway;
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/remote-address-validator/RemoteAddressValidator.sol#L19
+
 ##
 
-## [G-3] Avoid contract existence checks by using low level calls
+## [G-4] Avoid contract existence checks by using low level calls
 
 Saves ``3700 GAS``, ``37 Instances``
 
@@ -271,7 +317,7 @@ FILE: 2023-07-axelar/contracts/interchain-governance-executor/InterchainProposal
 
 ##
 
-## [G-4] Use ``Calldata`` pointer Saves more gas than ``memory`` pointer
+## [G-5] Use ``Calldata`` pointer Saves more gas than ``memory`` pointer
 
 Saves ``600 GAS``, ``per Loop Iterations``
 
@@ -321,7 +367,7 @@ FILE: 2023-07-axelar/contracts/cgp/AxelarGateway.sol
 ```
 ##
 
-## [G-5] IF’s/require() statements that check input arguments should be at the top of the function
+## [G-6] IF’s/require() statements that check input arguments should be at the top of the function
 
 Saves ``300 GAS``, ``2 Instance``
 
@@ -361,7 +407,7 @@ FILE: 2023-07-axelar/contracts/cgp/AxelarGateway.sol
 
 ##
 
-## [G-6] Functions guaranteed to revert when called by normal users can be marked ``payable`` 
+## [G-7] Functions guaranteed to revert when called by normal users can be marked ``payable`` 
 
 Saves ``231 GAS``, ``11 Instance``
 
@@ -474,7 +520,7 @@ https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/interchain-
 
 ##
 
-## [G-7] Optimize names to save gas
+## [G-8] Optimize names to save gas
 
 Saves ``27 Instances``
 
@@ -496,7 +542,7 @@ FILE: 2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenServi
 
 ##
 
-## [G-8] Default value initialization
+## [G-9] Default value initialization
 
 Saves ``80 GAS``,``4 Instance``
 
@@ -532,7 +578,7 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 
 ##
 
-## [G-9] Use constants instead of type(uintX).max
+## [G-10] Use constants instead of type(uintX).max
 
 Saves ``91 GAS``,``7 Instance``
 
@@ -561,7 +607,7 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 
 ##
 
-## [G-10] Splitting require()/if() statements that use && saves gas
+## [G-11] Splitting require()/if() statements that use && saves gas
 
 Saves ``52 GAS``,``4 Instance``
 
@@ -588,7 +634,7 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 
 ## 
 
-## [G-11] Caching global variables is more expensive than using the actual variable (use msg.sender instead of caching it)
+## [G-12] Caching global variables is more expensive than using the actual variable (use msg.sender instead of caching it)
 
 The ``msg.sender`` variable is a special variable that always refers to the address of the sender of the current transaction. This variable is not stored in memory, so it is much cheaper to use than a cached global variable.
 
