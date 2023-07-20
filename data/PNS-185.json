@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "PNS",
+  "risk": "2",
+  "title": "The execution of the `rotateSigners` function may be blocked due to insufficient gas",
+  "issueId": 185,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/185"
+}
