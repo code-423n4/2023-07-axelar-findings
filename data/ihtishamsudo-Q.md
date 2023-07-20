@@ -43,3 +43,27 @@ Rename the local variables that shadow another component.
 [TokenManager.sol#L53](https://github.com/code-423n4/2023-07-axelar/blob/be5fd29162cc329c3f8a0ce73681fb980af8028f/contracts/its/token-manager/TokenManager.sol#L53)
 #### Reference 
 https://github.com/crytic/slither/wiki/Detector-Documentation#local-variable-shadowing
+## [L-03] ```tokenManager_``` Is Missing Zero Address Validation
+#### Proof Of Concept 
+Code Snippet
+``` solidity
+{
+            address distributor_;
+            address tokenManager_;
+            string memory tokenName;
+            (tokenManager_, distributor_, tokenName, symbol, decimals) = abi.decode(params, (address, address, string, string, uint8));
+            _setDistributor(distributor_);
+            tokenManager = tokenManager_;
+            _setDomainTypeSignatureHash(tokenName);
+            name = tokenName;
+}
+```
+Here ```tokenManager = tokenManager_;``` Bob Specify tokenManager Mistankenly to zero address. Now Zero Address is assigned as tokenManager.
+#### Tools Used 
+Slither
+#### Code Link 
+[StandardizedToken.sol#L56](https://github.com/code-423n4/2023-07-axelar/blob/be5fd29162cc329c3f8a0ce73681fb980af8028f/contracts/its/token-implementations/StandardizedToken.sol#L56)
+#### Recommended Mitigation Step 
+Check that the address is not zero.
+#### Reference 
+[Zero Address Check](https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation)
