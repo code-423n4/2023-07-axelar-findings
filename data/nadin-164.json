@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "nadin",
+  "risk": "2",
+  "title": "Low-level transfer via call() can fail silently",
+  "issueId": 164,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/164"
+}
