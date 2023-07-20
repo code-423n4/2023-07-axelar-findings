@@ -67,3 +67,29 @@ Slither
 Check that the address is not zero.
 #### Reference 
 [Zero Address Check](https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation)
+## [L-04] Using ```Block.timestamp``` in ```if``` Condition Can Be dangerous
+#### Proof Of Concept 
+``` solidity
+function _finalizeTimeLock(bytes32 hash) internal {
+        .......
+
+        if (block.timestamp < eta) revert TimeLockNotReady();
+
+        .......
+    }  
+```
+Miner can manipulate ```block.timestamp``` to bypass this if condtion and possible scenario of bypassing this condition would be.
+- ```Premature Finalization```: If the manipulated ```block.timestamp``` is less than the expected eta value, the condition block.timestamp < eta will evaluate to ``true``` even though the required time delay has not actually passed. This could allow the ```finalization``` of a timelock before the intended waiting period is complete, bypassing the ```desired delay```.
+
+- ```Delayed Finalization```: Conversely, if the manipulated ```block.timestamp``` is greater than or equal to the expected eta value, the condition block.timestamp < eta will evaluate to false, and the ```TimeLockNotReady()``` revert statement will be triggered. This will ```prevent``` the finalization of the timelock even if the required time delay has actually passed.
+
+#### Tools Used 
+Slither
+#### Recommended Mitigation Step 
+Avoid Relying on ```Block.timestamp```
+#### Code Link
+[TimeLock.sol#L84](https://github.com/code-423n4/2023-07-axelar/blob/be5fd29162cc329c3f8a0ce73681fb980af8028f/contracts/gmp-sdk/util/TimeLock.sol#L84)
+#### Reference 
+[Block.timestamp](https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp)
+
+ 
