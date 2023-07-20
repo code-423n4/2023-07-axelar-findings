@@ -119,3 +119,8 @@ There are 3 instances of this issue occurring in the following 3 functions:
 2. deployRemoteCustomTokenManager - https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token-service/InterchainTokenService.sol#L360
 
 3. deployAndRegisterRemoteStandardizedToken - https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token-service/InterchainTokenService.sol#L413
+
+## [L-03] revertIfInvalidFee() check missing in function sendProposal() 
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalSender.sol#L80
+
+When sending proposal for execution at single destination chain using sendProposal(), we do not check if the msg.value provided is equal to the gas required. This check has been added to the [sendProposals() function](https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalSender.sol#L61) but not in sendProposal().
