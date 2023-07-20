@@ -64,6 +64,22 @@ File: contracts/its/interchain-token-service/InterchainTokenService.sol
 660:     }
 ```
 
+## [N-04] Existing function should be used maintain pattern across _processCommand() functions
+
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/governance/AxelarServiceGovernance.sol#L84
+
+The _getProposalHash() function is used to get the proposal hash in the [_processCommand() function in the InterchainGovernance.sol](https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/governance/InterchainGovernance.sol#L125) contract but not in the [_processCommand() function in the AxelarServiceCommand.sol contract](https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/governance/AxelarServiceGovernance.sol#L84) (which inherits from InterchainGovernance.sol). 
+
+We can take a look at the difference in pattern below:
+```solidity
+File: contracts/cgp/governance/InterchainGovernance.sol
+125: bytes32 proposalHash = _getProposalHash(target, callData, nativeValue);
+```
+```solidity
+File: contracts/cgp/governance/AxelarServiceGovernance.sol
+84: bytes32 proposalHash = keccak256(abi.encodePacked(target, callData, nativeValue));
+```
+
 ## [L-01] Missing EOA check for Distributor and Operator roles
 
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/utils/Distributable.sol#L39
