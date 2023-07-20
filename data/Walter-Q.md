@@ -3,6 +3,8 @@
 ## Gateway
 1) should check that the address used in the constructor are != addr(0)
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L64
+2) Attacker could bypass mint limit of a token,by deploying the same token with same tokenAddress but different symbol and mint from the new one,but will be minted by the "good" one,because the check of the mint limit will be done only on the symbol,so limit on the symbol and not on the address,multiple tokens could point to the same address but having different symbol,making the limit unlimited.
+could be resolved by considering even the tokenAddress on the validation checks before mint,tokenAddress will be managed as symbols and NEEDS to be unique.
 3) no check for address!= addr(0) in _mintToken function (line 512) that could lead to minted tokens to addr(0)
 4) remove all deprecated functions:
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L213-L226
