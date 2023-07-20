@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "zaevlad",
+  "risk": "2",
+  "title": "AxelarGateway functions can not work properly due to a mistake in modifier",
+  "issueId": 189,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/189"
+}
