@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "XDZIBECX",
+  "risk": "2",
+  "title": "Missing Flow Limit Check in setFlowLimit function ",
+  "issueId": 212,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/212"
+}
