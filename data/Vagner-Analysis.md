@@ -1,0 +1,4 @@
+The approach that I have taken in this evaluating this codebase is similar to other codebases, I read the code at a very low level at first to see if there are any inconsistencies in the codebase or logic flaws then I try to understand it as effective as possible from a high level perspective to see if the implementation is done right. Very interesting codebase about the interacting with multiple blockchains. I want to point out about my finding that even if I didn't specify the damage, since the implementation of the function can vary, I consider important for the sponsors to understand that doing a call to an arbitrary address with arbitrary data like they do in the function I talked about can be very dangerous and needs to be looked at, a similar finding with a dangerous arbitrary call with no damage specified is this one https://github.com/code-423n4/2022-04-dualityfocus-findings/issues/31.
+
+### Time spent:
+30 hours
