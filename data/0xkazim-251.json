@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "0xkazim",
+  "risk": "2",
+  "title": "the whole protocol did not support the ERC20 tokens that returns the name and symbol in form of bytes",
+  "issueId": 251,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/251"
+}
