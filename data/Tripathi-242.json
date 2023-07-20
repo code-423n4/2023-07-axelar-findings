@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Tripathi",
+  "risk": "2",
+  "title": "`approve` and `transferFrom` functions in `InterchainToken.sol` are prone to front run attack ",
+  "issueId": 242,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/242"
+}
