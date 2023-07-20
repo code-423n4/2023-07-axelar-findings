@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Haipls",
+  "risk": "2",
+  "title": "MultisigBase.sol | The lack of a unique identifier for the operation creates a risk of execution several times",
+  "issueId": 245,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/245"
+}
