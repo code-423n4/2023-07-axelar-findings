@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "pcarranzav",
+  "risk": "2",
+  "title": "Gas refunds from interchainTransferFrom calls may be lost",
+  "issueId": 166,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/166"
+}
