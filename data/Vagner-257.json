@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Vagner",
+  "risk": "2",
+  "title": "The function `expressReceiveTokenWithData` can be used to do a call with arbitrary data to any contract which implements `IInterchainTokenExpressExecutable`",
+  "issueId": 257,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/257"
+}
