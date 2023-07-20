@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "ck",
+  "risk": "2",
+  "title": "`finalUpgrade()` in `FinalProxy` can be prevented by malicious actor",
+  "issueId": 191,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/191"
+}
