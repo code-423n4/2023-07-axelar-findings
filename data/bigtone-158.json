@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "bigtone",
+  "risk": "3",
+  "title": "In the `InterchainTokenService` contract, certain functions cannot be paused",
+  "issueId": 158,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/158"
+}
