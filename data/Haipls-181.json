@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Haipls",
+  "risk": "3",
+  "title": "No passing the receive() call from Proxy to the implementation",
+  "issueId": 181,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/181"
+}
