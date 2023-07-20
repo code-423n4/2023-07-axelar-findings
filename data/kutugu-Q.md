@@ -3,8 +3,7 @@
 | ID     | Title                                                       | Severity |
 | ------ | ----------------------------------------------------------- | -------- |
 | [L-01] | Cross chain messages have no any executing protect          | Low      |
-| [L-02] | EIP-4758: Deactivate SELFDESTRUCT                           | Low      |
-| [L-03] | Gas obtained by SELFDESTRUCT will be stuck in the contract  | Low      |
+| [L-02] | Gas obtained by SELFDESTRUCT will be stuck in the contract  | Low      |
 
 # Detailed Findings
 
@@ -20,17 +19,7 @@ When a message remains unexecuted for a long time, anyone can execute it and may
 
 Add expiration time protection and msg.sender execution protection
 
-# [L-02] EIP-4758: Deactivate SELFDESTRUCT
-
-## Description
-
-The SELFDESTRUCT opcode may be removed through a hard fork in the future, which will result in applications will be broken
-
-## Recommendations
-
-There seems to be no need to selfdestruct the contract
-
-# [L-03] Gas obtained by SELFDESTRUCT will be stuck in the contract
+# [L-02] Gas obtained by SELFDESTRUCT will be stuck in the contract
 
 ## Description
 
