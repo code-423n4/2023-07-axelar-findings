@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Tripathi",
+  "risk": "2",
+  "title": "No way to get `topic` for current pending multisig and hence no information about currently pending tx ",
+  "issueId": 248,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/248"
+}
