@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "MohammedRizwan",
+  "risk": "3",
+  "title": "In InterchainProposalExecutor.sol, Tokens can get lost if the destination transaction can’t be executed",
+  "issueId": 203,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/203"
+}
