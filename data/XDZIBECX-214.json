@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "XDZIBECX",
+  "risk": "3",
+  "title": "Insecure Comparison in validateSender Function leading to ",
+  "issueId": 214,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/214"
+}
