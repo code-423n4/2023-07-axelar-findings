@@ -91,5 +91,19 @@ Avoid Relying on ```Block.timestamp```
 [TimeLock.sol#L84](https://github.com/code-423n4/2023-07-axelar/blob/be5fd29162cc329c3f8a0ce73681fb980af8028f/contracts/gmp-sdk/util/TimeLock.sol#L84)
 #### Reference 
 [Block.timestamp](https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp)
-
- 
+## [NC-01] ```contractId()``` of ```InterchainTokenServiceProxy``` Is Never Used And Should Be Removed 
+#### Proof Of Concept 
+``` solidity 
+function contractId() internal pure override returns (bytes32) {
+        return CONTRACT_ID;
+    }
+```
+This Function Is Never Used 
+#### Tools Used 
+Slither Detection
+#### Recommended Mitigation Step
+Removed Unsused or Dead Code for Code Efficiency and Optimization
+#### Code Link
+[InterchainTokenServiceProxy.sol#L29](https://github.com/code-423n4/2023-07-axelar/blob/be5fd29162cc329c3f8a0ce73681fb980af8028f/contracts/its/proxies/InterchainTokenServiceProxy.sol#L29)
+#### Reference 
+[DeadCode](https://github.com/crytic/slither/wiki/Detector-Documentation#dead-code)
