@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "kaveyjoe",
+  "risk": "2",
+  "title": "Loss of Trust in Previously Added Addresses due to Incorrect Validation Logic in RemoteAddressValidator Contract",
+  "issueId": 183,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/183"
+}
