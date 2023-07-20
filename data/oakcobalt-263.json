@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "oakcobalt",
+  "risk": "3",
+  "title": "Malicious callers can get all the token to be sent to destinationAddress by only sending a dust amount to destinationAddress",
+  "issueId": 263,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/263"
+}
