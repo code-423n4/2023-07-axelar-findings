@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Tripathi",
+  "risk": "2",
+  "title": "Improper validation of create2 return value",
+  "issueId": 230,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/230"
+}
