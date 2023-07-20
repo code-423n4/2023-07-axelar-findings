@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "pks_",
+  "risk": "2",
+  "title": "Token mint amounts abnormally if L2 sequencer goes down",
+  "issueId": 210,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/210"
+}
