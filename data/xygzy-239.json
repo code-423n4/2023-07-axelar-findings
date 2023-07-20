@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "xygzy",
+  "risk": "2",
+  "title": "Axelar Governance is unable to call `setFlowLimits` in `InterchainTokenService.sol`",
+  "issueId": 239,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/239"
+}
