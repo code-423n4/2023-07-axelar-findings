@@ -1,0 +1,11 @@
+**NC-01 | Unused error in `IExpressCallHandler.sol`**
+
+The error `SameDestinationAsCaller` [defined](https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interfaces/IExpressCallHandler.sol#L7) in the interface of ExpressCallHandler is unused in the implementation, strongly indicating that the Axelar development team meant to revert in this case, but could have forgotten to implement it or decided it was not necessary. Since I could not exploit the lack of such a `SameDestinationAsCaller` check, this issue is **Non-Critical** and serves as a reminder to the development team.
+
+**NC-02 | Misleading and inconsistent variable naming (`interchainTokenServiceAddress`)** 
+
+In `TokenManagerProxy.sol`, the [variable](https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/proxies/TokenManagerProxy.sol#L14) `interchainTokenServiceAddress` is of type `IInterchainTokenService`, which is misleading. In addition, the contract `RemoteAddressValidator.sol` defines [another variable](https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/remote-address-validator/RemoteAddressValidator.sol#L17C4-L17C60) also called `interchainTokenServiceAddress`, but this time of type `address`. This is inconsistent. Since this is a style issue that may manifest itself later, this issue is **Non-Critical**.
+
+**NC-03 | Comment in `InterchainProposalSender.sol` referring to variable `destinationChains` that is never defined or used**
+
+[This comment](https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/interchain-governance-executor/InterchainProposalSender.sol#L57) in `InterchainProposalSender.sol` notes a condition on an array called `destinationChains`. However, there is no variable called `destinationChains` used in the entire project. This implies that the Axelar development team changed their implementation plan, and as a result, their comments should also be updated. This is **Non-Critical** as it relates to the long-term maintainability of the Axelar codebase.
