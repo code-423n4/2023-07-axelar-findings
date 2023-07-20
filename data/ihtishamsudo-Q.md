@@ -107,3 +107,12 @@ Removed Unsused or Dead Code for Code Efficiency and Optimization
 [InterchainTokenServiceProxy.sol#L29](https://github.com/code-423n4/2023-07-axelar/blob/be5fd29162cc329c3f8a0ce73681fb980af8028f/contracts/its/proxies/InterchainTokenServiceProxy.sol#L29)
 #### Reference 
 [DeadCode](https://github.com/crytic/slither/wiki/Detector-Documentation#dead-code)
+## [NC-02] ```TokenManagerProxy``` Is Missing Inheritance From ```IProxy``` && ```AxelarGateway``` Is Missing Inheritance From ```IStandardizedTokenProxy```
+#### Tools Used 
+Slither Detection
+#### Recommended Mitigation Steps
+Add Inheritance 
+#### Code Link 
+Contract : TokenManagerProxy.sol && AxelarGateway.sol 
+#### Reference 
+[Missing Inheritance](https://github.com/crytic/slither/wiki/Detector-Documentation#missing-inheritance)
