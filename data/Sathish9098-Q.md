@@ -1,21 +1,82 @@
+# LOW FINDINGS
+##
 
-# Divide by zero should be avoided 
+## [L-1] ``_getTokenMintLimitKey,_getTokenTypeKey,_getTokenAddressKey,_getIsCommandExecutedKey`` functions not prevent the duplicate ``symbol`` values 
 
-# Use safeTranfer/SafetranferFrom
+### Impact
+If the functions ``_getTokenMintLimitKey``, ``_getTokenTypeKey``, ``_getTokenAddressKey``, and ``_getIsCommandExecutedKey`` do not incorporate any uniqueness, and ``symbol`` is the only varying parameter, then there will be ``hash collisions`` for ``duplicate symbol`` values.
 
-# Return values of transfer functions should be checked 
+### 
+```solidity
+FILE: 2023-07-axelar/contracts/cgp/AxelarGateway.sol
 
-# Return values of approve should be checked 
+ function _getTokenMintLimitKey(string memory symbol) internal pure returns (bytes32) {
+        return keccak256(abi.encodePacked(PREFIX_TOKEN_MINT_LIMIT, symbol));
+    }
 
-# Initialize functions could be frontrun 
+  function _getTokenTypeKey(string memory symbol) internal pure returns (bytes32) {
+        return keccak256(abi.encodePacked(PREFIX_TOKEN_TYPE, symbol));
+    }
 
-# For Critical functions should emit events
+    function _getTokenAddressKey(string memory symbol) internal pure returns (bytes32) {
+        return keccak256(abi.encodePacked(PREFIX_TOKEN_ADDRESS, symbol));
+    }
 
-# Use safeAllowance instead of normal approve 
+    function _getIsCommandExecutedKey(bytes32 commandId) internal pure returns (bytes32) {
+        return keccak256(abi.encodePacked(PREFIX_COMMAND_EXECUTED, commandId));
+    }
 
-# Need to approve 0 first for some of the tokens 
 
-Revert on Transfer to the Zero Address
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L556-L558
+
+### Recommended Mitigation
+Unique nonce or timestamp in the ``abi.encodePacked`` process to ensure that each call produces a unique hash
+
+```diff
+
+uint256 private nonce;
+
+function _getTokenMintLimitKey(string memory symbol) private returns (bytes32) {
+    return keccak256(abi.encodePacked(PREFIX_TOKEN_MINT_LIMIT, symbol, nonce++));
+}
+
+```
+##
+
+## [L-2] Lack of pause state Check in ``setFlowLimit()`` function Poses security risk in contract
+
+### Impact 
+
+The problem is the services paused by ``onlyOwner`` . But ``FlowLimit`` set by ``onlyOperator``this will lead to unintended consequences.  
+
+Allowing ``setFlowLimit()`` to execute when the contract is paused can lead to unintended consequences and may compromise the expected behavior of the paused contract. Depending on how the contract utilizes the ``FlowLimit``, this can introduce potential security vulnerabilities or operational issues.
+
+### POC
+
+```solidity
+FILE: 2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
+
+ function setFlowLimit(bytes32[] calldata tokenIds, uint256[] calldata flowLimits) external onlyOperator {
+        uint256 length = tokenIds.length;
+        if (length != flowLimits.length) revert LengthMismatch();
+        for (uint256 i; i < length; ++i) {
+            ITokenManager tokenManager = ITokenManager(getValidTokenManagerAddress(tokenIds[i]));
+            tokenManager.setFlowLimit(flowLimits[i]);
+        }
+    }
+
+```
+
+### Recommended Mitigation
+Incorporate the ``notPaused`` modifier in the ``setFlowLimit()`` function
+
+
+
+
+
+
+# Revert on Transfer to the Zero Address
 
 Revert on Zero Value Approvals
 
@@ -30,9 +91,7 @@ Pausable Tokens
 
 Missing Return Values- some tokens not return any values 
 
-Use ownable2step instead of normal ownable 
 
-Use abi.encode to avoid hash collision for dynamic values 
 
 # NON CRITICAL FINDINGS
 
@@ -57,4 +116,10 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 ## [NC-2] Shorter the inheritance list
 
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token-service/InterchainTokenService.sol#L37-L44
+
+##
+
+## [NC-3] For Critical functions should emit events
+
+
 
