@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "bart1e",
+  "risk": "2",
+  "title": "Proxy contracts have an empty `receive` function that will make it impossible to call `receive` on implementation contract",
+  "issueId": 313,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/313"
+}
