@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "ak1",
+  "risk": "3",
+  "title": "AxelarGateway.sol: external setup funtion allow anyone to set `governance_`, `mintLimiter_` and `operator` ",
+  "issueId": 420,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/420"
+}
