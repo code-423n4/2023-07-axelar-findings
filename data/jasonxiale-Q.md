@@ -39,6 +39,16 @@ File:
 
 If `tokenManagerDeployer_` or `standardizedTokenDeployer_` is zero, the function will not revert since  low level call returns true if the address doesn't exist, and  `tokenManagerDeployer` and `standardizedTokenDeployer` can't be set again
 
+# Gas griefing/theft is possible on unsafe external call
+File:
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/util/Caller.sol#L18
+
+    Now (bool success, ) is actually the same as writing (bool success, bytes memory data) which basically means that even though the data is omitted it doesn’t 
+    mean that the contract does not handle it. Actually, the way it works is the bytes data that was returned from the receiver will be copied to memory. Memory 
+    allocation becomes very costly if the payload is big, so this means that if a receiver implements a fallback function that returns a huge payload, then the  
+    msg.sender of the transaction, in our case the relayer, will have to pay a huge amount of gas for copying this payload to memory.
+
+
 # missing validate `impl` is zero
 File:
     https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/proxies/TokenManagerProxy.sol#L34
