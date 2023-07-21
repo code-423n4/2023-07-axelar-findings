@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "libratus",
+  "risk": "2",
+  "title": "InterchainProposalExecutor doesn't support actions with value",
+  "issueId": 476,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/476"
+}
