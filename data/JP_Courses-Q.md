@@ -1,3 +1,36 @@
+0. https://github.com/code-423n4/2023-07-axelar/blob/9048517392e03720a0cd32d5b79db84f5e5f7c8e/contracts/its/interchain-token/InterchainToken.sol#L92-L102
+/// @audit H/M?: where's the case for < ???; <= is covered, but < is not covered, why not???
+
+1. https://github.com/code-423n4/2023-07-axelar/blob/9048517392e03720a0cd32d5b79db84f5e5f7c8e/contracts/its/interchain-token/InterchainToken.sol#L95
+/// @audit H/M?: only covers case for finite allowance that requires approval, doesnt cover case for infinite allowance if needs approval.
+
+2. https://github.com/code-423n4/2023-07-axelar/blob/9048517392e03720a0cd32d5b79db84f5e5f7c8e/contracts/its/interchain-token/InterchainToken.sol#L88-L90
+https://github.com/code-423n4/2023-07-axelar/blob/9048517392e03720a0cd32d5b79db84f5e5f7c8e/contracts/its/interchain-token/InterchainToken.sol#L94
+/// @audit H/M: no zero amounts checks for both _allowance & amount. max damage?; also, initially it seems attacker can call this function successfully and cause token transfer?
+
+3. https://github.com/code-423n4/2023-07-axelar/blob/9048517392e03720a0cd32d5b79db84f5e5f7c8e/contracts/its/interchain-token/InterchainToken.sol#L92-L102
+/// @audit H/M: L100 should be moved to end of if block above it
+/// @audit part of above comment: elseif should be added in place of above approve statement(L100) to cover case for < , to do this: _approve(sender, address(tokenManager), allowance_);
+
+Recommendation:
+
+        ITokenManager tokenManager = getTokenManager();
+        if (tokenManagerRequiresApproval()) {
+            uint256 allowance_ = allowance[sender][address(tokenManager)];  
+            if (allowance_ != type(uint256).max) {  
+                if (allowance_ >= type(uint256).max - amount) { /// @audit replaced > with >= otherwise case = is excluded
+                    allowance_ = type(uint256).max - amount;
+                    
+                    _approve(sender, address(tokenManager), allowance_ + amount);
+                    
+                } else if (allowance_ < type(uint256).max - amount) {
+                		_approve(sender, address(tokenManager), allowance_);  
+                } 
+            }   
+        }
+
+===============================
+
 1. https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/gmp-sdk/util/Bytes32String.sol#L23-L38
 /// @audit QA: It is recommended to include a check to ensure the length of the converted string does not exceed the maximum length of the original string.
 
