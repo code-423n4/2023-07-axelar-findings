@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "saneryee",
+  "risk": "3",
+  "title": "Lack of Validation for 'destinationAddress' in 'transmitSendToken' Function May Lead to Failed Transactions",
+  "issueId": 284,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/284"
+}
