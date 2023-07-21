@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Udsen",
+  "risk": "2",
+  "title": "USER CAN EXECUTE THE TRANSACTION WITHOUT PROVIDING THE REQUIRED AMOUNT OF GAS FEES ",
+  "issueId": 385,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/385"
+}
