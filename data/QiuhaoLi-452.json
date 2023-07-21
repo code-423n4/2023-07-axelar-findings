@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "QiuhaoLi",
+  "risk": "2",
+  "title": "A whale can DoS the token service by reaching flowlimit",
+  "issueId": 452,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/452"
+}
