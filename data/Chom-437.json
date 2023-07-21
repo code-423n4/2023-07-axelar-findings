@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Chom",
+  "risk": "3",
+  "title": "StandardizedToken can be setup multiple times by anyone. Causing unlimited mint by anyone.",
+  "issueId": 437,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/437"
+}
