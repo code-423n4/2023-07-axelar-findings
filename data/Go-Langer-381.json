@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Go-Langer",
+  "risk": "3",
+  "title": "[H] Users can lose their funds if the transaction reverts on destination chain",
+  "issueId": 381,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/381"
+}
