@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Emmanuel",
+  "risk": "3",
+  "title": "Deployer of standardized token is allowed to deploy same standardized token to another chain, with different decimals",
+  "issueId": 286,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/286"
+}
