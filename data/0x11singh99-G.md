@@ -9,10 +9,12 @@
 | [G-05] | Do not calculate constant variables                                                                                      |    28     |
 | [G-06] | Missing `zero-address` check in `constructor`                                                                            |     4     |
 | [G-07] | Use nested if and, avoid multiple check combinations using &&                                                            |     1     |
-| [G-08] | Using ternary operator instead of if else saves gas                                                                      |     1     |
+| [G-08] | Using ternary operator instead of if else saves gas                                                                      |     2     |
 | [G-09] | Use unchecked{} whenever underflow/overflow not possible                                                                 |     2     |
 
-Total 9 issues
+Total 9 issues.
+
+Note: Here some gas findings may be similar to automated report but all the instances are different that were missed in auto report.
 
 ## [G-01] Use `delete` for state variables to reinitialize with their default value rather than assigning default value saves gas.
 
@@ -419,7 +421,7 @@ Recommended Changes: Use nested if
 When using the if-else construct, Solidity generates bytecode that includes a JUMP operation. The JUMP operation requires the EVM to change the program counter to a different location in the bytecode, resulting in additional gas costs. On the other hand, the ternary operator doesn't involve a JUMP operation, as it generates bytecode that utilizes conditional stack manipulation.
 The exact amount of gas saved by using the ternary operator instead of the if-else construct in Solidity can vary depending on the specific scenario, the complexity of the surrounding code, and the conditions involved
 
-_1 instance - 1 file:_
+_2 instances - 2 files:_
 
 ### Instance#1 :
 
@@ -445,6 +447,31 @@ Recommended Changes :
 - 82:          }
 
 +     !success ? _onTargetExecutionFailed(call, result) : _onTargetExecuted(call, result);
+```
+
+### Instance#2 :
+
+```solidity
+File: /contracts/its/token-manager/TokenManager.sol
+
+68:  if (operatorBytes.length == 0) {
+69:            operator_ = address(interchainTokenService);
+70:        } else {
+71:            operator_ = operatorBytes.toAddress();
+72:        }
+```
+
+https://github.com/code-423n4/2023-07-axelar/blob/main/contracts/its/token-manager/TokenManager.sol#L68C9-L72C10
+
+Recommended Changes :
+
+```diff
+- 68:  if (operatorBytes.length == 0) {
+- 69:            operator_ = address(interchainTokenService);
+- 70:        } else {
+- 71:            operator_ = operatorBytes.toAddress();
+- 72:        }
++       operatorBytes.length == 0 ? operator_ = address(interchainTokenService) : operator_ = operatorBytes.toAddress();
 ```
 
 ## [G-09] Use unchecked{} whenever underflow/overflow not possible
