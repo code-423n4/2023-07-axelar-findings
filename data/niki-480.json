@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "niki",
+  "risk": "3",
+  "title": "Malicious user can permanently break InterchainProposalExecutor#_executeProposal by returning huge amounts of data",
+  "issueId": 480,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/480"
+}
