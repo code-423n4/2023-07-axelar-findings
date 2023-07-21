@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "pcarranzav",
+  "risk": "2",
+  "title": "Deployer wallet retains ability to spoof validated senders after ownership transfer",
+  "issueId": 267,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/267"
+}
