@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "libratus",
+  "risk": "2",
+  "title": "InterchainToken approval to TokenManager can be unexpectedly set to unlimited",
+  "issueId": 467,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/467"
+}
