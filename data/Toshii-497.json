@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Toshii",
+  "risk": "2",
+  "title": "Users who call `expressReceiveTokenWithData` or `expressReceiveToken` can griefed to pay for fees",
+  "issueId": 497,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/497"
+}
