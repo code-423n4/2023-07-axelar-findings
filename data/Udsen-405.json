@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Udsen",
+  "risk": "2",
+  "title": "USER FUNDS COULD BE LOST DUE TO REDUNDANT `metadata` INPUT VARIABLE",
+  "issueId": 405,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/405"
+}
