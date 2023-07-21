@@ -1,6 +1,10 @@
-# Issue: Lack of input validation in contracts/cgp/AxelarGateway.sol
-The contract doesn't perform extensive input validation for some functions. For example, in the deployToken function, the name and symbol parameters are assumed to be valid without any checks.
-# Recommendation: Implement thorough input validation checks for all user-supplied parameters. Validate and sanitize the inputs to prevent potential security issues such as buffer overflows, unexpected behavior, or vulnerabilities arising from maliciously crafted inputs.
+# Issue: Lack of input validation 
+in contracts/cgp/AxelarGateway.sol
+The contract doesn't perform extensive input validation for some functions. For example, in the 'deployToken' function, the name and symbol parameters are assumed to be valid without any checks.
+Recommendation: Implement thorough input validation checks for all user-supplied parameters. Validate and sanitize the inputs to prevent potential security issues such as buffer overflows, unexpected behavior, or vulnerabilities arising from maliciously crafted inputs.
+
+# Lack of Validation for Source Address and Payload in contracts/interchain-governance executor/InterchainProposalExecutor.sol
+The contract does not include any checks to ensure that the source address and payload are valid and correspond to an actual InterchainProposalSender. This could allow malicious actors to provide incorrect or manipulated payload data, leading to unexpected behavior. Validate the payload and its components before execution to ensure consistency and prevent potential attacks.
 
 # Lack of error messages
  Some error messages are missing or not descriptive enough, which can make it difficult to identify the cause of a failed transaction or provide clear feedback to users interacting with the contract
