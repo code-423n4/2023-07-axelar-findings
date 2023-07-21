@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Udsen",
+  "risk": "2",
+  "title": "LACK OF INPUT VALIDATION FOR THE `minimumTimeDelay ` PARAMETER COULD BREAK THE FUNCTIONALITY OF THE ` TimeLock.sol` CONTRACT",
+  "issueId": 423,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/423"
+}
