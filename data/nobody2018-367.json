@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "nobody2018",
+  "risk": "2",
+  "title": "InterchainProposalExecutor._executeProposal will never succeed in executing a call with value",
+  "issueId": 367,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/367"
+}
