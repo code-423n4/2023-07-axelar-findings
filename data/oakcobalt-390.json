@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "oakcobalt",
+  "risk": "3",
+  "title": "Users can steal contract funds with multicall feature on InterchainTokenService",
+  "issueId": 390,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/390"
+}
