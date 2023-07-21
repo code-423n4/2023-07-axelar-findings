@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Toshii",
+  "risk": "2",
+  "title": "Gas refunds are returned to the wrong address, leading to loss of funds for the payer",
+  "issueId": 456,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/456"
+}
