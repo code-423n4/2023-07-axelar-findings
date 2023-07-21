@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "te_aut",
+  "risk": "3",
+  "title": "Using controlled delegatecall could in calling _deployTokenManager.tokenManagerDeploy()",
+  "issueId": 362,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/362"
+}
