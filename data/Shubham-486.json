@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Shubham",
+  "risk": "2",
+  "title": "A Remote InterchainTokenService will not be able to call `_execute()` because incorrect validation of hashes due to wrong conversion of address to lowercase",
+  "issueId": 486,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/486"
+}
