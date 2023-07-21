@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "8olidity",
+  "risk": "2",
+  "title": "Users can drain the contract balance",
+  "issueId": 343,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/343"
+}
