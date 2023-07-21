@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Emmanuel",
+  "risk": "2",
+  "title": "Users funds are temporarily locked when sent to a chain whose InterchainTokenService is paused",
+  "issueId": 291,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/291"
+}
