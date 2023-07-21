@@ -2,18 +2,16 @@
 
 | ID              | Title                                                                              | Severity     |
 | --------------- | ---------------------------------------------------------------------------------- | ------------ |
-| [L-01]  | Lack of minimum signers & minimum threshold check                                  | Low          |
-| [L-02]   | Signers could lose their balance of tokens if the target function uses `tx.origin` | Low          |
-| [L-03]  | Executed interchain proposals can be re-executed again                             | Low          |
-| [L-04]  | Interchain proposals can be executed out of order                                  | Low          |
+| [L-01]   | Lack of minimum signers & minimum threshold check                                  | Low          |
+| [L-02] | Signers could lose their balance of tokens if the target function uses `tx.origin` | Low          |
+| [L-03] | Executed interchain proposals can be re-executed again                             | Low          |
+| [L-04]   | Interchain proposals can be executed out of order                                  | Low          |
 | [NC-01] | `hasSignerVoted` function returns false if the proposal has been executed          | Non Critical |
 | [NC-02] | `getSignerVotesCount` function returns zero if the proposal has been executed      | Non Critical |
 
 # Low
 
-## [L-01]
-
-Lack of minimum signers & minimum threshold check
+## [L-01] Lack of minimum signers & minimum threshold check
 
 ## Vulnerability Details
 
@@ -43,9 +41,7 @@ Manual Testing.
 
 In `_rotateSigners` function: ensure that the minimum signers number is >= 3,and minimum threshold is >= 2.
 
-## [L-02]
-
-Signers could lose their balance of tokens if the target function uses `tx.origin`
+## [L-02] Signers could lose their balance of tokens if the target function uses `tx.origin`
 
 ## Vulnerability Details
 
@@ -115,9 +111,7 @@ Manual Testing.
 
 Signers should be advised to use an untouched wallet address so that target code interaction can't harm them.
 
-## [L-03]
-
-Executed interchain proposals can be re-executed again
+## [L-03] Executed interchain proposals can be re-executed again
 
 ## Vulnerability Details
 
@@ -177,9 +171,7 @@ Manual Testing.
 
 Add a mechanism to track the proposals; so that the relayer can check if the proposal has been executed before or not.
 
-## [L-04]
-
-Interchain proposals can be executed out of order
+## [L-04] Interchain proposals can be executed out of order
 
 ## Vulnerability Details
 
@@ -241,9 +233,7 @@ Check that proposals are always executed in order; otherwise, if the risk is dee
 
 # Non Critical
 
-## [NC-01]
-
-`hasSignerVoted` function returns false if the proposal has been executed
+## [NC-01] `hasSignerVoted` function returns false if the proposal has been executed
 
 ## Vulnerability Details
 
@@ -269,9 +259,7 @@ Manual Testing.
 
 Add another mechanism to save the votes of the signers even after the proposal execution.
 
-## [NC-02]
-
-`getSignerVotesCount` function returns zero if the proposal has been executed
+## [NC-02] `getSignerVotesCount` function returns zero if the proposal has been executed
 
 ## Vulnerability Details
 
