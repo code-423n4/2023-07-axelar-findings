@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "BRONZEDISC",
+  "risk": "3",
+  "title": "Missing Destination Validation in Interchain Proposals",
+  "issueId": 415,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/415"
+}
