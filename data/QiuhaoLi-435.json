@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "QiuhaoLi",
+  "risk": "2",
+  "title": "InitProxy and Proxy should be abstract or override contractId",
+  "issueId": 435,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/435"
+}
