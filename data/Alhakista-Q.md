@@ -29,3 +29,8 @@ The contract uses an Ownable modifier to control certain functions' access. Howe
 
 # Potential Reentrancy Vulnerability
 The '_onTargetExecutionFailed' function allows for reversion with a reason if the target contract execution fails. Reverting with a reason involves reading from memory, which could potentially lead to a reentrancy vulnerability if there are any external calls or state changes after the revert statement. To avoid this, ensure that external calls are made after the revert statement, and critical state changes are handled before reverting.
+
+# Zero address
+In if '(IUpgradable(newImplementation).contractId() != IUpgradable(this).contractId()) revert InvalidImplementation();' , the contract ensures that the contractId of the new implementation matches the current contract's contractId. If the contractId function of the new implementation contract returns a zero value or an invalid value, it could lead to an unintended upgrade or failure in the upgrade process and there is not check for zero address in the process.
+
+Therefore, it is crucial to review the contractId implementation in the IUpgradable interface and any derived contract that implements it. Ensure that it returns a unique and non-zero value for each valid contract implementation to avoid any potential risks associated with zero addresses or invalid contract IDs.
