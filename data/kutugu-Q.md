@@ -1,9 +1,10 @@
 # Findings Summary
 
-| ID     | Title                                                       | Severity |
-| ------ | ----------------------------------------------------------- | -------- |
-| [L-01] | Cross chain messages have no any executing protect          | Low      |
-| [L-02] | Gas obtained by SELFDESTRUCT will be stuck in the contract  | Low      |
+| ID     | Title                                                                     | Severity |
+| ------ | ------------------------------------------------------------------------- | -------- |
+| [L-01] | Cross chain messages have no any executing protect                        | Low      |
+| [L-02] | Gas obtained by SELFDESTRUCT will be stuck in the contract                | Low      |
+| [L-03] | CommandId may be repeated so that subsequent messages cannot be executed  | Low      |
 
 # Detailed Findings
 
@@ -27,4 +28,24 @@ AxelarGateway does not have any way to withdraw the gas compensation from the se
 
 ## Recommendations
 
-Add a withdrawn function
+Add a withdrawn function 
+
+# [L-03] CommandId may be repeated so that subsequent messages cannot be executed
+
+## Description
+
+```solidity
+    function callContract(
+        string calldata destinationChain,
+        string calldata destinationContractAddress,
+        bytes calldata payload
+    ) external {
+        emit ContractCall(msg.sender, destinationChain, destinationContractAddress, keccak256(payload), payload);
+    }
+```
+
+Cross-chain message execution is conducted by invoking the `AxelarGateway.callContract` by InterchainProposalSender, and corresponding logs are generated to form commandId. From the code, logs are not include nonce. commandId may conflict if the msg.sender sends the same message multiple times.
+
+## Recommendations
+
+Add nonce to prevent commandId conflicts
