@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "BRONZEDISC",
+  "risk": "2",
+  "title": "function addTrustedAddress does not check if `chain` is supported by the gateway",
+  "issueId": 330,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/330"
+}
