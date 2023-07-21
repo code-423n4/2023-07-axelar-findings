@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "te_aut",
+  "risk": "3",
+  "title": "Using controlled delegatecall, to call InterchainTokenService._deployStandardizedToken contract instead of call()",
+  "issueId": 361,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/361"
+}
