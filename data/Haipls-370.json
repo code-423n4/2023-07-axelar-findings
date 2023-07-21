@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Haipls",
+  "risk": "2",
+  "title": "Adversary can prevent the deployemnt in `{TokenManagerDeployer, StandardizedTokenDeployer}` by frontrunning",
+  "issueId": 370,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/370"
+}
