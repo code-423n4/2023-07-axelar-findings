@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "nobody2018",
+  "risk": "2",
+  "title": "InterchainProposalSender.sendProposal/sendProposals should add access control",
+  "issueId": 368,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/368"
+}
