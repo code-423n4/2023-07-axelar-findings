@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Udsen",
+  "risk": "2",
+  "title": " `setFlowLimit` EXECUTION COULD REVERT THE PENDING TRANSFER TRANSACTIONS",
+  "issueId": 401,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/401"
+}
