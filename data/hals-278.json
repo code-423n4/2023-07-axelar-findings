@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "hals",
+  "risk": "2",
+  "title": "`AxelarServiceGovernance.sol`: missing timelock check before proposal execution",
+  "issueId": 278,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/278"
+}
