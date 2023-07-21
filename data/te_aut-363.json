@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "te_aut",
+  "risk": "3",
+  "title": " balance of the recipient to is updated after the token transfer (safeTransferFrom function) could lead to reentrancy attack",
+  "issueId": 363,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/363"
+}
