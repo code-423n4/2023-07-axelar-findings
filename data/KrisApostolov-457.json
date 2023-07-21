@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "KrisApostolov",
+  "risk": "2",
+  "title": "Measuring in native tokens will cause some transactions to fail unexpectedly due to gas price spikes on the destination chain",
+  "issueId": 457,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/457"
+}
