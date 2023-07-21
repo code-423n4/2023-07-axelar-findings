@@ -33,6 +33,11 @@ Type: uint
 ├ Hex: 0x46a52cf33029de9f84853745a87af28464c80bf0346df1b32e205fc73319f621
 └ Decimal: 31953739399695593666283731411274577053612996981383225307242093477592974358049
 
+# updating command status as True while executing unknown command
+File:
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L367-L369
+While handing unknown command, I think it's better to set the status as `True` to mark the command as executed, other, if future updating the protocol happened to be the same as some unknown command, the command might get executed by mistake
+
 # adding more factor to generate salt
 File:
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L428
