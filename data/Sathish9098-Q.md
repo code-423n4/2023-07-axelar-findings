@@ -191,26 +191,7 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 
 ##
 
-## [L-8] Revert on Zero Value Approvals
-
-### Impact
-Some tokens (e.g. BNB) revert when approving a zero value amount (i.e. a call to approve(address, 0)).
-Integrators may need to add special cases to handle this logic if working with such a token.
-
-### POC
-
-```solidity
-
-61: _approve(sender, address(tokenManager), allowance_ + amount);
-
-100: _approve(sender, address(tokenManager), allowance_ + amount);
-
-```
-https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token/InterchainToken.sol#L100
-
-##
-
-## [L-9] Revert on Zero Value Transfers
+## [L-8] Revert on Zero Value Transfers
 
 ### Impact
 Some tokens revert when transferring a zero value amount. Many ERC-20 and ERC-721 token contracts implement a safeguard that reverts transactions which attempt to transfer tokens with zero amount. This is because such transfers are often the result of programming errors. The OpenZeppelin library, a popular choice for implementing these standards, includes this safeguard. For token contract developers who want to avoid unintentional transfers with zero amount, it's good practice to include a condition that reverts the transaction if the amount is zero.
@@ -254,14 +235,65 @@ https://github.com/code-423n4/2023-07-axelar/tree/main/contracts/its/token-manag
 ### Recommended Mitigation
 Make sure ``amount > 0`` before calling transfer function
 
+##
+
+## [L-9] Revert on Zero Value Approvals
+
+### Impact
+Some tokens (e.g. BNB) revert when approving a zero value amount (i.e. a call to approve(address, 0)).
+Integrators may need to add special cases to handle this logic if working with such a token.
+
+### POC
+
+```solidity
+
+61: _approve(sender, address(tokenManager), allowance_ + amount);
+
+100: _approve(sender, address(tokenManager), allowance_ + amount);
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token/InterchainToken.sol#L100
+
+##
+
+## [L-10] ``registerCanonicalToken()`` Not checking whether the ``tokenaddress`` already managed by a token manager
+
+### Impact
+If two different token managers are managing the ``same token address``, there is a ``risk`` of ``conflicting behavior``. For example, one token manager might allow transfers while another token manager might disallow transfers. This could lead to errors or unexpected behavior for users.
+
+### POC
+```solidity
+FILE: 2023-07-axelar/contracts/its/interchain-token-service/InterchainTokenService.sol
+
+ function registerCanonicalToken(address tokenAddress) external payable notPaused returns (bytes32 tokenId) {
+        (, string memory tokenSymbol, ) = _validateToken(tokenAddress);
+        if (gateway.tokenAddresses(tokenSymbol) == tokenAddress) revert GatewayToken();
+        tokenId = getCanonicalTokenId(tokenAddress);
+        _deployTokenManager(tokenId, TokenManagerType.LOCK_UNLOCK, abi.encode(address(this).toBytes(), tokenAddress));
+    }
+
+```
+### Recommended Mitigation
+Add ``isTokenManaged()`` function to check the token address existence 
+
+```diff
+
+function registerCanonicalToken(address tokenAddress) external payable notPaused returns (bytes32 tokenId) {
+(, string memory tokenSymbol, ) = _validateToken(tokenAddress);
+if (gateway.tokenAddresses(tokenSymbol) == tokenAddress) revert GatewayToken();
++ if (isTokenManaged(tokenAddress)) revert TokenAlreadyManaged();
+tokenId = getCanonicalTokenId(tokenAddress);
+_deployTokenManager(tokenId, TokenManagerType.LOCK_UNLOCK, abi.encode(address(this).toBytes(), tokenAddress));
+
+}
+
+```
 
 
 
 
-## When ever we receive ETH thorugh recieve function should emit the event 
 
-
-
+## When ever we receive ETH through receive() function should emit the event 
 
 
 
