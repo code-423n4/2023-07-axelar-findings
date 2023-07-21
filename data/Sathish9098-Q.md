@@ -102,7 +102,9 @@ https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56
 ## [L-4] Avoid Hardcoded Values 
 
 ### Impact
-Two constants ``PREFIX_EXPRESS_RECEIVE_TOKEN`` and ``PREFIX_EXPRESS_RECEIVE_TOKEN_WITH_DATA`` are hardcoded. This means that anyone who knows the contract code will know what the prefixes are. This could make it easier for attackers to forge transactions that look like they were sent from the Axelar gateway.
+Two constants ``PREFIX_EXPRESS_RECEIVE_TOKEN`` and ``PREFIX_EXPRESS_RECEIVE_TOKEN_WITH_DATA`` are hardcoded. This means that anyone who knows the contract code will know what the prefixes are. This could make it easier for attackers to forge transactions that look like they were sent from the Axelar gateway. 
+
+``codehash != 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470`` hardcoded value check is not appreciated . This will cause problem in future .
 
 Possible Problems:
 
@@ -111,6 +113,16 @@ Possible Problems:
 - Hardcoded values can make your contract less flexible.
 
 ### POC
+
+
+```solidity
+FILE: Breadcrumbs2023-07-axelar/contracts/cgp/AxelarGateway.sol
+
+509: return codehash != bytes32(0) && codehash != 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470; 
+
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L35
 
 ```solidity
 FILE: 2023-07-axelar/contracts/its/utils/ExpressCallHandler.sol
@@ -121,6 +133,7 @@ FILE: 2023-07-axelar/contracts/its/utils/ExpressCallHandler.sol
 
 ```
 https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/utils/ExpressCallHandler.sol#L14-L16
+
 
 ### Recommended Mitigation
 It would be better to generate the prefixes dynamically and in lowercase. This would make the contract more secure and more flexible
@@ -289,12 +302,162 @@ _deployTokenManager(tokenId, TokenManagerType.LOCK_UNLOCK, abi.encode(address(th
 
 ```
 
+##
 
+## [L-11] Unused/empty receive()/fallback() function
 
+### 
+If the intention is for the Ether to be used, the function should call another function or emit something, otherwise it should revert (e.g. require(msg.sender == address(weth)))
 
+### POC
 
-## When ever we receive ETH through receive() function should emit the event 
+```solidity
+FILE: 2023-07-axelar/contracts/cgp/governance/InterchainGovernance.sol
 
+168: receive() external payable {}
+
+```
+
+##
+
+## [L-12] ``_approve()`` doesn’t check return value
+
+### Impact
+if the approve() function fails, the caller will not be notified of the failure
+
+### POC
+
+```solidity
+
+61: _approve(sender, address(tokenManager), allowance_ + amount);
+
+100: _approve(sender, address(tokenManager), allowance_ + amount);
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/interchain-token/InterchainToken.sol#L100
+
+### Recommended Mitigation
+Add the control to check _approve() status 
+
+##
+
+## [L-13] Eth that is accidentally sent to a ``receive()`` function cannot be withdrawn
+
+### Impact
+The ``receive()`` function is used to handle incoming ether (native currency) transfers to a contract. However, when tokens (other than the native currency) are accidentally sent to the receive() function, they are effectively trapped within the contract, and there is ``no built-in mechanism`` to ``withdraw`` or ``recover them``.
+
+### POC
+
+```solidity
+FILE: 2023-07-axelar/contracts/cgp/governance/InterchainGovernance.sol
+
+168: receive() external payable {}
+
+```
+
+### Recommended Mitigation
+Add Recovery mechanism to recover Eth sent accidently to the contract
+
+##
+
+## [L-14] Lack of access control in ``executeProposal()`` function
+
+### Impact
+There is a lack of access control in the ``executeProposal()`` function of the Interchain Governance contract. Without access control, any external account can call this function and execute governance proposals, which may lead to unauthorized or malicious actions being taken
+
+### POC
+
+```solidity
+FILE: 2023-07-axelar/contracts/cgp/governance/InterchainGovernance.sol
+
+function executeProposal(
+        address target,
+        bytes calldata callData,
+        uint256 nativeValue
+    ) external payable {
+        bytes32 proposalHash = keccak256(abi.encodePacked(target, callData, nativeValue));
+
+        _finalizeTimeLock(proposalHash);
+        _call(target, callData, nativeValue);
+
+        emit ProposalExecuted(proposalHash, target, callData, nativeValue, block.timestamp);
+    }
+
+```
+
+### Recommended Mitigation
+Add modifiers like ``onlyOwner`` to execute the proposals 
+
+##
+
+## [L-15] ``sourceChain`` and ``sourceAddress`` string comparison is vulnerable to timing attacks
+
+### Impact
+In the ``_execute`` function, the contract uses string comparison to verify if the provided ``sourceChain`` and ``sourceAddress`` match the expected governance chain and address. This method is vulnerable to timing attacks, where an attacker could exploit the time taken for the comparison to determine partial information about the comparison result.
+
+### POC
+
+```solidity
+FILE: 2023-07-axelar/contracts/cgp/governance/InterchainGovernance.sol
+
+ if (keccak256(bytes(sourceChain)) != governanceChainHash || keccak256(bytes(sourceAddress)) != governanceAddressHash)
+            revert NotGovernance();
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/governance/InterchainGovernance.sol#L92-L93
+
+### Recommended Mitigation
+Use ``bytes32`` for ``governanceChainHash`` and ``governanceAddressHash``, and use == for direct comparison
+
+##
+
+## [L-16] ``InterchainProposalSender.sol contract lacks nonce handling mechanism to prevent replay attacks
+
+### Impact
+
+The sendProposal function in the InterchainProposalSender contract can be susceptible to replay attacks without a nonce mechanism because it allows users to broadcast the same proposal multiple times.
+
+ leading to the following issues:
+
+ - Double Execution
+ - Unintended Cost
+ - Invalid Replays
+
+### POC 
+
+```solidity
+
+function sendProposals(InterchainCalls.InterchainCall[] calldata interchainCalls) external payable override {
+        // revert if the sum of given fees are not equal to the msg.value
+        revertIfInvalidFee(interchainCalls);
+
+        for (uint256 i = 0; i < interchainCalls.length; ) {
+            _sendProposal(interchainCalls[i]);
+            unchecked {
+                ++i;
+            }
+        }
+    }
+
+```
+### Recommended Mitigation
+Add nonce mechanism to ``sendProposal `` function
+
+##
+
+## [L-17] Contract ``RemoteAddressValidator.sol`` is inherited ``upgradable` but  not actually ungradable contract
+
+### Impact
+The absence of an ``initialize`` function suggests that the contract is not intended to be upgradable using a proxy contract. Instead, it follows a traditional deployment approach, where the constructor is used to set up the initial state of the contract. Once deployed, the state and behavior of the contract are immutable, and any changes or updates would require deploying a new instance of the contract.
+
+### POC 
+```solidity
+FILE: 2023-07-axelar/contracts/its/remote-address-validator/RemoteAddressValidator.sol
+
+12: contract RemoteAddressValidator is IRemoteAddressValidator, Upgradable {
+
+```
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/remote-address-validator/RemoteAddressValidator.sol#L12
 
 
 # NON CRITICAL FINDINGS
