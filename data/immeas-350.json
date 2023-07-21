@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "immeas",
+  "risk": "2",
+  "title": "cross chain deploy calls can steal left over `eth` in `InterchainTokenService`",
+  "issueId": 350,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/350"
+}
