@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "immeas",
+  "risk": "2",
+  "title": "interchain token transfers to destination addresses that support flash loans can have their transfer stolen",
+  "issueId": 339,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/339"
+}
