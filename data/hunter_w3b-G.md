@@ -2,37 +2,57 @@
 
 # Summary
 
-| Number | Optimization Details                                                                                                     | Context |
-| :----: | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
-| [G-01] | Using `calldata` instead of `memory` for read-only arguments in external functions saves gas                             |   10    |
-| [G-02] | `TokenManagerLockUnlock.sol::_takeToken` SafeTokenTransfer we should check amount for possible gas save                  |    1    |
-| [G-03] | Using `storage` instead of `memory` for structs/arrays saves gas                                                         |    7    |
-| [G-04] | `Keccak256()` should only need to be called on a specific string literal once                                            |    4    |
-| [G-05] | Add `unchecked {}` for subtractions where the operands cannot underflow because of a previous require() or if statement  |    4    |
-| [G-06] | Functions `guaranteed` to when called by normal users can be marked Payable                                              |   16    |
-| [G-07] | `Empty blocks` should be removed or emit something                                                                       |    8    |
-| [G-08] | With `assembly`, .call (bool success)  transfer can be done gas-optimized                                                |    9    |
-| [G-09] | Can make the variable outside the loop to save gas                                                                       |    4    |
-| [G-10] | Use `assembly` to write address storage values                                                                           |    3    |
-| [G-11] | Duplicated `if()` checks should be refactored to a modifier or function                                                  |    8    |
-| [G-12] | Should use arguments instead of state variable                                                                           |    1    |
-| [G-13] | Not using the named return variable when a function returns, wastes deployment gas                                       |    3    |
-| [G-14] | Expressions for `constant` values such as a call to keccak256(), should use immutable rather than constant               |    1    |
-| [G-15] | Multiple `address /ID` mappings can be combined into a `single mapping` of an address/ID to a struct , where appropriate |    1    |
-| [G-16] | Don’t Initialize Variables with Default Value                                                                            |    4    |
-| [G-17] | abi.encode() is less efficient than abi.encodePacked()                                                                   |   31    |
-| [G-18] | Use hardcode address instead `address(this)`                                                                             |   25    |
-| [G-19] | Amounts should be checked for 0 before calling a transfer                                                                |    9    |
-| [G-20] | Using `bools` for storage incurs overhead                                                                                |    6    |
-| [G-21] | Make `3 event` parameters indexed when possible                                                                          |    8    |
-| [G-22] | Use constants instead of `type(uintx).max`                                                                               |   10    |
-| [G-23] | Using a positive conditional flow to save a NOT opcode                                                                   |   18    |
-| [G-24] | Using `XOR (^)` and `OR () `bitwise equivalents                                                                          |    3    |
-| [G-25] | `If-statements` that use `&&` can be refactored into nested if statements                                                |    6    |
-| [G-26] | `x += y` costs more gas than `x = x + y` for state variables                                                             |    1    |
-| [G-27] | Use `custom errors` rather than `revert()/require()` strings to save gas                                                 |    -    |
-| [G-28] | Cache `state variables` outside of loop to avoid reading storage on every iteration                                      |    4    |
-| [G-29] | Use `do while` loop instead of for loop                                                                                  |    1    |
+| Number | Optimization Details                                                                                                                                    | Context |
+| :----: | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :-----: |
+| [G-00] | `IInterchainTokenService::getChainName` function that returns the name of the current chain as a string introduce higher gas costs and increase storage |    1    |
+| [G-01] | Using `calldata` instead of `memory` for read-only arguments in external functions saves gas                                                            |   10    |
+| [G-02] | `TokenManagerLockUnlock.sol::_takeToken` SafeTokenTransfer we should check amount for possible gas save                                                 |    1    |
+| [G-03] | Using `storage` instead of `memory` for structs/arrays saves gas                                                                                        |    7    |
+| [G-04] | `Keccak256()` should only need to be called on a specific string literal once                                                                           |    4    |
+| [G-05] | Add `unchecked {}` for subtractions where the operands cannot underflow because of a previous require() or if statement                                 |    4    |
+| [G-06] | Functions `guaranteed` to when called by normal users can be marked Payable                                                                             |   16    |
+| [G-07] | `Empty blocks` should be removed or emit something                                                                                                      |    8    |
+| [G-08] | With `assembly`, .call (bool success)  transfer can be done gas-optimized                                                                               |    9    |
+| [G-09] | Can make the variable outside the loop to save gas                                                                                                      |    4    |
+| [G-10] | Use `assembly` to write address storage values                                                                                                          |    3    |
+| [G-11] | Duplicated `if()` checks should be refactored to a modifier or function                                                                                 |    8    |
+| [G-12] | Should use arguments instead of state variable                                                                                                          |    1    |
+| [G-13] | Not using the named return variable when a function returns, wastes deployment gas                                                                      |    3    |
+| [G-14] | Expressions for `constant` values such as a call to keccak256(), should use immutable rather than constant                                              |    1    |
+| [G-15] | Multiple `address /ID` mappings can be combined into a `single mapping` of an address/ID to a struct , where appropriate                                |    1    |
+| [G-16] | Don’t Initialize Variables with Default Value                                                                                                           |    4    |
+| [G-17] | abi.encode() is less efficient than abi.encodePacked()                                                                                                  |   31    |
+| [G-18] | Use hardcode address instead `address(this)`                                                                                                            |   25    |
+| [G-19] | Amounts should be checked for 0 before calling a transfer                                                                                               |    9    |
+| [G-20] | Using `bools` for storage incurs overhead                                                                                                               |    6    |
+| [G-21] | Make `3 event` parameters indexed when possible                                                                                                         |    8    |
+| [G-22] | Use constants instead of `type(uintx).max`                                                                                                              |   10    |
+| [G-23] | Using a positive conditional flow to save a NOT opcode                                                                                                  |   18    |
+| [G-24] | Using `XOR (^)` and `OR () `bitwise equivalents                                                                                                         |    3    |
+| [G-25] | `If-statements` that use `&&` can be refactored into nested if statements                                                                               |    6    |
+| [G-26] | `x += y` costs more gas than `x = x + y` for state variables                                                                                            |    1    |
+| [G-27] | Use `custom errors` rather than `revert()/require()` strings to save gas                                                                                |    -    |
+| [G-28] | Cache `state variables` outside of loop to avoid reading storage on every iteration                                                                     |    4    |
+| [G-29] | Use `do while` loop instead of for loop                                                                                                                 |    1    |
+
+## [G-0] `IInterchainTokenService::getChainName` function that returns the name of the current chain as a string introduce higher gas costs and increase storage
+
+Using strings for chain names can introduce higher gas costs and increase storage requirements compared to using more efficient data types like enums or bytes32. The getChainName() function's use of a string may lead to unintended consequences in certain scenarios.
+
+### impact
+
+The potential impact of using strings for chain names is relatively low, but it can become a concern in certain situations where gas efficiency and storage optimization are crucial. For instance, if the contract frequently performs string manipulations or comparisons, it can lead to increased transaction costs and might not be ideal for performance-critical applications.
+
+https://github.com/code-423n4/2023-07-axelar/blob/main/contracts/its/interfaces/IInterchainTokenService.sol#L94-L95
+
+```solidity
+File: contracts/its/interfaces/IInterchainTokenService.sol
+
+94    function getChainName() external view returns (string memory name);
+
+```
+
+To potentially improve gas efficiency and reduce storage costs, consider using an enum or bytes32 data type to represent the chain name, depending on the specific requirements of the contract. If the chain names are a fixed and well-defined set of options, using an enum would be an efficient choice. On the other hand, if dynamic chain names are required, using bytes32 might offer a more efficient alternative to strings.
 
 ## [G-01] Using `calldata` instead of `memory` for read-only arguments in external functions saves gas
 
