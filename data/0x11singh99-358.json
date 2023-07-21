@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "0x11singh99",
+  "risk": "2",
+  "title": "Anyone can call executePropopsal() function of  InterchainGovernance.sol and  transfer ether and tokens from this contract to itself.",
+  "issueId": 358,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/358"
+}
