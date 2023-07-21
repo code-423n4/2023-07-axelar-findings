@@ -14,7 +14,7 @@
 
 Total 9 issues.
 
-Note: Here some gas findings may be similar to automated report but all the instances are different that were missed in auto report.
+Note: Here some gas findings may be similar to automated report but all the instances are different that were missed in automated report.
 
 ## [G-01] Use `delete` for state variables to reinitialize with their default value rather than assigning default value saves gas.
 
