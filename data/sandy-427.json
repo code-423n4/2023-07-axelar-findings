@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "sandy",
+  "risk": "2",
+  "title": "External calls in a loop with a possibility of DoS.",
+  "issueId": 427,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/427"
+}
