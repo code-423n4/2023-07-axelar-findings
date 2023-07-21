@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Emmanuel",
+  "risk": "2",
+  "title": "Users funds are indefinitely locked when sent to a chain that does not have enough tokens.",
+  "issueId": 292,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/292"
+}
