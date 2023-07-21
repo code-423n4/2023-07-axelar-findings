@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "QiuhaoLi",
+  "risk": "2",
+  "title": "_getProposalHash should add a nonce to prevent hash collision DoS",
+  "issueId": 430,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/430"
+}
