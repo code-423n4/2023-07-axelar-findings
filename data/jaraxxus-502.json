@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "jaraxxus",
+  "risk": "2",
+  "title": "Accepted proposal may be recreated at the same address with a malicious proposal if there's a self destruct function in the accepted proposal",
+  "issueId": 502,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/502"
+}
