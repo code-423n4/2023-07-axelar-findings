@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "bart1e",
+  "risk": "2",
+  "title": "`TokenManager`'s flow limit logic is broken for `ERC777` tokens",
+  "issueId": 332,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/332"
+}
