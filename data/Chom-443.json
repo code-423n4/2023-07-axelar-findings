@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Chom",
+  "risk": "2",
+  "title": "Non-EVM chains are supported on InterchainTokenService but doesn't support on InterchainProposalExecutor",
+  "issueId": 443,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/443"
+}
