@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "souverien65",
+  "risk": "3",
+  "title": "Potential Reentrancy in onlyAdmin modifier",
+  "issueId": 379,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/379"
+}
