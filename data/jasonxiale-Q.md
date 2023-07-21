@@ -59,3 +59,13 @@ File:
     https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/its/proxies/TokenManagerProxy.sol#L34
 
 If `impl` is zero, the `constructor` function will not revert since  low level call returns true if the address doesn't exist
+
+# using `safeTransfer` instead of `transfer`
+File:
+https://github.com/code-423n4/2023-07-axelar/blob/2f9b234bb8222d5fbe934beafede56bfb4522641/contracts/cgp/AxelarGateway.sol#L443
+```solidity
+            (bool success, bytes memory returnData) = depositHandler.execute(
+                tokenAddress,
+                abi.encodeWithSelector(IERC20.transfer.selector, address(this), IERC20(tokenAddress).balanceOf(address(depositHandler)))
+            );
+```
