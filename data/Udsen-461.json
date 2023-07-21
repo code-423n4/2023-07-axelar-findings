@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "Udsen",
+  "risk": "3",
+  "title": "`onlyProxy` MODIFIER CAN BE BYPASSED BY A MALICIOUS PROXY CONTRACT AND CAN PUSH THE IMPLEMENTATION CONTRACT INTO AN UNDESIRABLE STATE",
+  "issueId": 461,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/461"
+}
