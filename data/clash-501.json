@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "clash",
+  "risk": "2",
+  "title": "ProposalHash can be easily duplicated with same target, callData and nativeValue",
+  "issueId": 501,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/501"
+}
