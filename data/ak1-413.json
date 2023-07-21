@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "ak1",
+  "risk": "3",
+  "title": "MultisigBase.sol : Unsafe `onlySigners` modifier",
+  "issueId": 413,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/413"
+}
