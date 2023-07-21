@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "mahyar",
+  "risk": "3",
+  "title": "funds can be stolen in `InterchainGovernance`, `Multisig` and `AxelarServiceGovernance` contracts",
+  "issueId": 469,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/469"
+}
