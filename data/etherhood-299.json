@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "etherhood",
+  "risk": "3",
+  "title": "Frontrun attack executing same transaction twice",
+  "issueId": 299,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/299"
+}
