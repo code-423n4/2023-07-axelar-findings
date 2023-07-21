@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "sces60107",
+  "risk": "2",
+  "title": "`MultisigBase.rotateSigners` shouldn't share the same threshold with normal operation.",
+  "issueId": 340,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/340"
+}
