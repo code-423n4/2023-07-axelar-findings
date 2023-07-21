@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "0xkazim",
+  "risk": "3",
+  "title": "calling the `sendToken` by the `TokenManagerProxy` proxy will fail because  of the `onlyTokenManager` modifier",
+  "issueId": 264,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/264"
+}
