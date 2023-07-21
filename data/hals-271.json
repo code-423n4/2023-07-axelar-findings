@@ -1,0 +1,8 @@
+{
+  "contest": 260,
+  "handle": "hals",
+  "risk": "3",
+  "title": "Any signer can unlock any function protected by `onlySigners` modifier by sending a `msg.data` of a nearly winning proposal",
+  "issueId": 271,
+  "issueUrl": "https://github.com/code-423n4/2023-07-axelar-findings/issues/271"
+}
